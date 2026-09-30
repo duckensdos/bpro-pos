@@ -287,7 +287,7 @@
   .opt b { font-weight: 600; }
   .opt i { font-style: normal; font-family: var(--sc-font-mono); }
   .opt small { grid-column: 1 / -1; color: var(--sc-ink-soft); font-size: var(--sc-t-xs); }
-  .opt .pop { font-family: var(--sc-font-mono); font-size: 10px; letter-spacing: .08em; color: var(--sc-accent-ink); background: var(--sc-accent); border-radius: 4px; padding: 1px 6px; margin-left: 8px; vertical-align: 2px; }
+  .opt .pop, .tier .pop { white-space: nowrap; font-family: var(--sc-font-mono); font-size: 10px; letter-spacing: .08em; color: var(--sc-accent-ink); background: var(--sc-accent); border-radius: 4px; padding: 1px 6px; margin-left: 8px; vertical-align: 2px; }
   .opt input:checked + span { border-color: var(--sc-accent); background: color-mix(in oklab, var(--sc-accent) 9%, transparent); }
   .opt input:focus-visible + span { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
   .spec { margin-top: var(--sc-6); }
@@ -351,6 +351,22 @@
     .hero__ribbon { display: none; }
     .receipt.is-printing { animation: none; transform: none; }
   }
+.wa-fab { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 60; width: 56px; height: 56px; border-radius: 999px; display: grid; place-items: center; background: #25D366; color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.35); transition: transform 140ms ease; }
+  .wa-fab:hover { transform: scale(1.06); }
+  .wa-fab:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .plans__sub { font-size: var(--sc-t-sm); font-family: var(--sc-font-mono); letter-spacing: var(--sc-track-wide); text-transform: uppercase; color: var(--sc-accent); font-weight: 500; margin: 0 0 var(--sc-5); }
+  .tiers { display: grid; gap: var(--sc-4); grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: var(--sc-8); }
+  .tier { display: flex; flex-direction: column; gap: var(--sc-3); padding: var(--sc-5); border-radius: 16px; border: 1px solid var(--sc-hairline-strong); background: linear-gradient(170deg, #1A1E1D, #121414); }
+  .tier--pop { border-color: var(--sc-accent); box-shadow: 0 0 0 1px var(--sc-accent) inset; }
+  .tier h4 { margin: 0; font-size: var(--sc-t-sm); font-weight: 600; display: flex; gap: var(--sc-2); align-items: center; flex-wrap: wrap; }
+  .tier__price { margin: 0; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); }
+  .tier__price b { color: var(--sc-ink); font-size: var(--sc-t-2xl, 1.75rem); font-weight: 700; letter-spacing: -0.02em; margin-right: .2em; }
+  .tier p.soft { margin: 0; font-size: var(--sc-t-sm); }
+  .tier ul { margin: 0; padding-left: 1.1em; font-size: var(--sc-t-sm); color: var(--sc-ink-soft); display: grid; gap: 4px; flex: 1; }
+  .tier .btn { justify-content: center; margin-top: var(--sc-2); }
+  .plans__note { text-align: center; margin-top: var(--sc-6); }
+  @media (max-width: 1080px) { .tiers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .tiers { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -494,7 +510,7 @@
         <div class="tryapp__actions">
           <a class="btn btn--go btn--lg" href="https://app.pointofsales.fr/business/register" target="_blank" rel="noopener">Kreye kont ou</a>
           <a class="btn btn--ghost btn--lg" href="https://app.pointofsales.fr/login" target="_blank" rel="noopener">Konekte</a>
-          <small>Ou bezwen èd pou kòmanse? <a href="mailto:support@pointofsales.fr">support@pointofsales.fr</a></small>
+          <small>Ou bezwen èd pou kòmanse? <a href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20plis%20enf%C3%B2masyon%20sou%20BPRO%20POS." target="_blank" rel="noopener">WhatsApp +509 4383 0148</a> · <a href="mailto:support@pointofsales.fr">support@pointofsales.fr</a></small>
         </div>
       </div>
     </div>
@@ -556,8 +572,40 @@
     <div class="wrap">
       <div class="plans__head" data-sc-in data-sc-stagger="60">
         <h2 id="plan-title" class="sc-display">Chwazi solisyon ki bon pou biznis ou.</h2>
-        <p class="sc-body">Itilize materyèl ou deja genyen, oswa chwazi yon kit BPRO ki vini ak materyèl. Chak plan gen konfigirasyon, fòmasyon ak sipò teknik.</p>
+        <p class="sc-body">Chwazi yon abònman pou lojisyèl la. Si ou pa gen materyèl, ajoute yon kit BPRO. Chak plan gen konfigirasyon, fòmasyon ak sipò teknik.</p>
       </div>
+      <h3 class="plans__sub">1 · Abònman lojisyèl (chak ane)</h3>
+      <div class="tiers">
+          <article class="tier">
+            <h4>BPRO START</h4>
+            <p class="tier__price"><b>15,000</b> GDES / ane</p>
+            <p class="soft">Pou ti biznis ki bezwen tout bagay esansyèl pou byen jere aktivite yo.</p>
+            <ul><li>Lavant ak resi</li><li>Stock ak depans</li><li>Kliyan ak anplwaye</li><li>Sistèm adapte ak biznis ou</li><li>1 lokal</li></ul>
+            <a class="btn btn--ghost" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Peye plan sa</a>
+          </article>
+          <article class="tier tier--pop">
+            <h4>BPRO BUSINESS<span class="pop">PI POPILÈ</span></h4>
+            <p class="tier__price"><b>50,000</b> GDES / ane</p>
+            <p class="soft">Pou biznis k ap grandi ki bezwen plis kontwòl oswa plizyè lokal.</p>
+            <ul><li>Tout sa ki nan START</li><li>Plizyè lokal</li><li>Plizyè itilizatè</li><li>Rapò avanse</li><li>Fonksyon avanse selon biznis ou</li><li>Sipò priyoritè</li></ul>
+            <a class="btn btn--go" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Peye plan sa</a>
+          </article>
+          <article class="tier">
+            <h4>BPRO CORPORATE</h4>
+            <p class="tier__price"><b>250,000</b> GDES / ane</p>
+            <p class="soft">Pou konpayi ki bezwen yon sistèm konplè pou jere operasyon yo.</p>
+            <ul><li>Tout sa ki nan BUSINESS</li><li>Branch ak itilizatè san limit*</li><li>Website / WooCommerce</li><li>API ak entegrasyon</li><li>Konfigirasyon pèsonalize</li><li>Sipò dedye</li></ul>
+            <a class="btn btn--ghost" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Peye plan sa</a>
+          </article>
+          <article class="tier">
+            <h4>BPRO EDUCATION</h4>
+            <p class="tier__price"><b>25,000</b> GDES / ane</p>
+            <p class="soft">Pou lekòl, kolèj, inivèsite ak sant fòmasyon.</p>
+            <ul><li>Elèv ak pwofesè</li><li>Klas ak pwogram</li><li>Peman eskoladite</li><li>Nòt ak kanè</li><li>Rapò</li><li>Sipò teknik</li></ul>
+            <a class="btn btn--ghost" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Peye plan sa</a>
+          </article>
+      </div>
+      <h3 class="plans__sub">2 · Materyèl POS (yon sèl peman)</h3>
       <div class="chooser">
         <div class="showcase" data-sc-tilt="4" aria-hidden="true">
           <div class="own" data-kit="software"><strong>Ou deja gen materyèl?</strong><span>Òdinatè, tablèt, printer oswa terminal POS konpatib. Ou jis bezwen lojisyèl la.</span></div>
@@ -569,15 +617,16 @@
         <div>
           <fieldset class="options" id="kitOptions">
             <legend>Plan ak materyèl</legend>
-            <label class="opt"><input type="radio" name="kit" value="software"><span><b>BPRO Software</b><i>15,000 GDES / ane</i><small>Pou biznis ki deja gen materyèl konpatib. Materyèl pa enkli.</small></span></label>
-            <label class="opt"><input type="radio" name="kit" value="mobile7"><span><b>BPRO Mobile 7</b><i>$250 USD</i><small>Ti aparèy Android mobil ak printer entegre.</small></span></label>
-            <label class="opt"><input type="radio" name="kit" value="fixe"><span><b>BPRO POS Fixe 15.6"</b><i>$350 USD</i><small>Gwo terminal tactile pou cashier ak kontwa fiks.</small></span></label>
-            <label class="opt"><input type="radio" name="kit" value="tablet" checked><span><b>BPRO POS Tablet 11"<span class="pop">PI POPILÈ</span></b><i>$450 USD</i><small>Terminal compact tout-an-yon ak printer entegre.</small></span></label>
-            <label class="opt"><input type="radio" name="kit" value="restaurant"><span><b>Restaurant Mobile</b><i>$500 USD</i><small>Pou sèvè ki pran kòmand pandan y ap deplase.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="software"><span><b>Lojisyèl sèlman</b><i>Depi 15,000 GDES / ane</i><small>Ou deja gen materyèl konpatib. Chwazi yon abònman anlè a.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="mobile7" checked><span><b>BPRO Mobile 7<span class="pop">PI POPILÈ</span></b><i>$250 USD</i><small>≈ 34,250 GDES · Ti aparèy Android mobil ak printer entegre.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="fixe"><span><b>BPRO POS Fixe 15.6"</b><i>$350 USD</i><small>≈ 47,950 GDES · Gwo terminal tactile pou cashier ak kontwa fiks.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="tablet"><span><b>BPRO POS Tablet 11"</b><i>$450 USD</i><small>≈ 61,650 GDES · Terminal compact tout-an-yon ak printer entegre.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="restaurant"><span><b>Restaurant Mobile</b><i>$500 USD</i><small>≈ 68,500 GDES · Pou sèvè ki pran kòmand pandan y ap deplase.</small></span></label>
           </fieldset>
           <div class="spec" id="kitSpec" aria-live="polite"></div>
         </div>
       </div>
+      <p class="fine soft plans__note">Pri final la depann de kalite biznis ou, kantite itilizatè, kantite branch ak modil ou bezwen. Pri an GDES yo se apwoksimasyon.</p>
     </div>
   </section>
 
@@ -602,12 +651,12 @@
       <div>
         <details><summary>Èske BPRO bon pou kalite biznis mwen an?</summary><p>Si ou vann pwodwi, sèvis, oswa toude, BPRO gen plizyè zouti ki ka adapte ak operasyon ou. Mande yon demo pou nou montre ou yon konfigirasyon ki pi pre kalite biznis ou.</p></details>
         <details><summary>Èske BPRO sèlman pou magazen?</summary><p>Non. BPRO ka sèvi restoran, gym, barbershop, salon, otèl, klinik, garaj, repair shop, faktori, distribitè ak lòt biznis sèvis.</p></details>
-        <details><summary>Èske mwen oblije achte materyèl?</summary><p>Non. Si ou deja gen materyèl konpatib, ou ka itilize BPRO Software pou 15,000 GDES pa ane.</p></details>
+        <details><summary>Èske mwen oblije achte materyèl?</summary><p>Non. Si ou deja gen materyèl konpatib, ou peye sèlman abònman lojisyèl la: START 15,000, BUSINESS 50,000, CORPORATE 250,000 oswa EDUCATION 25,000 GDES pa ane.</p></details>
         <details><summary>E si mwen pa gen materyèl?</summary><p>Ou ka chwazi Mobile 7, POS Fixe 15.6 pous, POS Tablet 11 pous oswa Restaurant Mobile.</p></details>
         <details><summary>Èske mwen jwenn fòmasyon?</summary><p>Wi. Nou ede ou konfigire sistèm nan epi fòme ekip ou pou itilize li.</p></details>
         <details><summary>Èske mwen ka vann pwodwi ak sèvis ansanm?</summary><p>Wi. BPRO ka jere pwodwi, sèvis, reparasyon, abònman ak lòt kalite tranzaksyon.</p></details>
         <details><summary>Èske mwen ka jere plizyè anplwaye?</summary><p>Wi. Ou ka kreye itilizatè ak diferan nivo aksè.</p></details>
-        <details><summary>Èske mwen ka jere plizyè branch?</summary><p>Wi, selon konfigirasyon operasyon ak plan biznis ou.</p></details>
+        <details><summary>Èske mwen ka jere plizyè branch?</summary><p>Wi. Plan BUSINESS (50,000 GDES / ane) gen plizyè lokal, epi CORPORATE gen branch san limit.</p></details>
         <details><summary>Èske BPRO ka enprime resi?</summary><p>Wi. Ou ka itilize printer tèmik konpatib oswa yon aparèy ki gen printer entegre.</p></details>
         <details><summary>Èske kliyan ka kòmande sou WhatsApp?</summary><p>Wi, avèk modil Katalòg QR ak WhatsApp Ordering la.</p></details>
         <details><summary>Èske tout bonus yo enkli nan tout plan?</summary><p>Gen kèk modil ak fonksyon ki ka depann de plan, materyèl ak konfigirasyon biznis ou.</p></details>
@@ -625,8 +674,9 @@
           <div class="close__ctas" data-sc-cue="0 1 0 0" data-sc-rise="0">
             <a class="btn btn--go" data-sc-magnet="0.26" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
             <a class="btn btn--ghost" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Kòmande yon Kit</a>
+            <a class="btn btn--ghost" href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20plis%20enf%C3%B2masyon%20sou%20BPRO%20POS." target="_blank" rel="noopener">WhatsApp</a>
           </div>
-          <p class="close__mail" data-sc-cue="0 1 0 0">Oswa ekri nou: <a href="mailto:support@pointofsales.fr">support@pointofsales.fr</a></p>
+          <p class="close__mail" data-sc-cue="0 1 0 0">Oswa ekri nou: <a href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20plis%20enf%C3%B2masyon%20sou%20BPRO%20POS." target="_blank" rel="noopener">WhatsApp +509 4383 0148</a> · <a href="mailto:support@pointofsales.fr">support@pointofsales.fr</a></p>
         </div>
         <div class="summary" data-sc-cue="0 1 0 0" aria-live="polite">
           <div class="receipt is-shown" id="summaryReceipt"></div>
@@ -637,7 +687,8 @@
         <span>© 2026 BPRO POS Ayiti</span>
         <a href="mailto:support@pointofsales.fr">support@pointofsales.fr</a>
         <nav aria-label="Rezo sosyal">
-          <a href="https://www.facebook.com/profile.php?id=61585018724720" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20plis%20enf%C3%B2masyon%20sou%20BPRO%20POS." target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.facebook.com/profile.php?id=61585018724720" target="_blank" rel="noopener">Facebook</a>
           <a href="https://www.instagram.com/pointofsales26" target="_blank" rel="noopener">Instagram</a>
           <a href="https://www.youtube.com/@Mrdosmarketing" target="_blank" rel="noopener">YouTube</a>
         </nav>
@@ -768,13 +819,13 @@
 
   /* ---------------- kit chooser: selection carries to the close ---------- */
   const kits = {
-    software:   { name: 'BPRO Software', price: '15,000 GDES / ane', specs: ['Lavant ak stock', 'Pwodwi ak sèvis', 'Kliyan ak founisè', 'Depans', 'Fakti ak resi', 'Rapò', 'Konfigirasyon', 'Fòmasyon', 'Sipò teknik'], ideal: 'Biznis ki deja gen òdinatè, tablèt, printer oswa terminal POS konpatib. Materyèl pa enkli.' },
+    software:   { name: 'Lojisyèl sèlman', price: 'Depi 15,000 GDES / ane', specs: ['Lavant ak stock', 'Pwodwi ak sèvis', 'Kliyan ak founisè', 'Depans', 'Fakti ak resi', 'Rapò', 'Konfigirasyon', 'Fòmasyon', 'Sipò teknik'], ideal: 'Biznis ki deja gen òdinatè, tablèt, printer oswa terminal POS konpatib. START 15,000, BUSINESS 50,000, CORPORATE 250,000 oswa EDUCATION 25,000 GDES / ane.' },
     mobile7:    { name: 'BPRO Mobile 7', price: '$250 USD', specs: ['Ekran 7 pous', 'Android', 'Printer tèmik entegre', 'Batri rechargeable', 'SIM card', 'Memory card', 'Wi-Fi ak Bluetooth', 'Entènèt mobil'], ideal: 'Boutik, salon, barbershop, gym, ti restoran ak famasi.' },
     fixe:       { name: 'BPRO POS Fixe 15.6"', price: '$350 USD', specs: ['Ekran tactile 15.6 pous', 'Windows', 'Wi-Fi ak USB', 'Koneksyon scanner', 'Koneksyon printer', 'Koneksyon cash drawer', 'BPRO enstale'], ideal: 'Market, supermarket, quincaillerie, auto parts, famasi ak distribitè.' },
     tablet:     { name: 'BPRO POS Tablet 11"', price: '$450 USD', specs: ['Ekran tactile 11 pous', 'Windows', 'Printer tèmik entegre', 'Wi-Fi ak USB', 'Koneksyon scanner', 'Koneksyon cash drawer', 'BPRO enstale'], ideal: '' },
     restaurant: { name: 'Restaurant Mobile', price: '$500 USD', specs: ['Sunmi Mix', 'Android', 'Rechargeable', 'Printer entegre', 'Jesyon tab', 'Jesyon sèvè', 'Kitchen Order Ticket', 'Pickup ak delivery', 'Rapò sèvè'], ideal: 'Restoran kote sèvè yo pran kòmand pandan y ap deplase.' },
   };
-  let kit = 'tablet';
+  let kit = 'mobile7';
   function renderKit() {
     const k = kits[kit];
     document.querySelectorAll('.showcase [data-kit]').forEach(el => el.classList.toggle('is-on', el.dataset.kit === kit));
@@ -808,5 +859,6 @@
   renderKit();
 })();
 </script>
+<a class="wa-fab" href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20plis%20enf%C3%B2masyon%20sou%20BPRO%20POS." target="_blank" rel="noopener" aria-label="Ekri nou sou WhatsApp"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg></a>
 </body>
 </html>

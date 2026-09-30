@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /lab/
+Disallow: /src-assets/
+
+Sitemap: https://www.pointofsales.fr/sitemap.xml

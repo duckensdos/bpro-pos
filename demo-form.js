@@ -6,10 +6,34 @@
   const WA_NUMBER = '50943830148';
   // Paste the GHL workflow "Inbound Webhook" URL here. Empty = WhatsApp only.
   const GHL_WEBHOOK = '';
-  const TYPES = ['Boutik ak market', 'Famasi', 'Quincaillerie', 'Auto parts', 'Restoran', 'Barbershop ak salon',
-    'Gym', 'Magazen rad ak tenis', 'Garaj ak repair shop', 'Manufacturing', 'Patisri', 'Lekòl'];
-  const START = ['Touswit', 'Semèn sa a', 'Mwa sa a', 'Nan 1 a 3 mwa', 'M ap reflechi toujou'];
-  const INVEST = ['Wi, mwen pare', 'Non, pa kounye a', 'Mwen bezwen plis enfòmasyon'];
+  // Kreyòl by default; French on pages with <html lang="fr">.
+  const FR = (document.documentElement.lang || '').toLowerCase().startsWith('fr');
+  const L = FR ? {
+    types: ['Boutique et supermarché', 'Pharmacie', 'Quincaillerie', 'Pièces auto', 'Restaurant', 'Barbershop et salon de beauté',
+      'Gym', 'Vêtements et chaussures', 'Garage et atelier de réparation', 'Fabrication', 'Pâtisserie', 'École'],
+    start: ['Tout de suite', 'Cette semaine', 'Ce mois-ci', 'Dans 1 à 3 mois', 'J\'y réfléchis encore'],
+    invest: ['Oui, je suis prêt', 'Non, pas maintenant', 'J\'ai besoin de plus d\'informations'],
+    q: ['Quel est le nom de votre entreprise ?', 'Quel est votre numéro WhatsApp ?', 'Quelle est l\'adresse de l\'entreprise ?', 'Quel type d\'entreprise avez-vous ?', 'Quand voulez-vous commencer ?', 'Êtes-vous prêt à investir 15 000 HTG pour le système ?'],
+    ph: ['Exemple : Boutique Belle Espérance', 'Exemple : +509 3X XX XXXX', 'Exemple : Delmas 33, Port-au-Prince', 'Exemple : boutique, restaurant, pharmacie…'],
+    hintTel: 'Pour vous contacter au sujet de la démo.', hintType: 'Écrivez-le librement.',
+    title: 'Demander une démo gratuite', next: 'Continuer', back: '← Retour', send: 'Envoyer sur WhatsApp', fine: 'Démo gratuite, sans engagement.',
+    count: (i, n) => `Question ${i} sur ${n}`, errChoice: 'Choisissez une réponse.', errEmpty: 'Merci de répondre à cette question.', errTel: 'Entrez un numéro WhatsApp valide.',
+    msg: ['Bonjour BPRO, je voudrais une démo.', 'Entreprise', 'WhatsApp', 'Adresse', 'Type d\'entreprise', 'Je veux commencer', 'Prêt à investir 15 000 HTG'],
+    close: 'Fermer',
+  } : {
+    types: ['Boutik ak market', 'Famasi', 'Quincaillerie', 'Auto parts', 'Restoran', 'Barbershop ak salon',
+      'Gym', 'Magazen rad ak tenis', 'Garaj ak repair shop', 'Manufacturing', 'Patisri', 'Lekòl'],
+    start: ['Touswit', 'Semèn sa a', 'Mwa sa a', 'Nan 1 a 3 mwa', 'M ap reflechi toujou'],
+    invest: ['Wi, mwen pare', 'Non, pa kounye a', 'Mwen bezwen plis enfòmasyon'],
+    q: ['Ki non biznis ou?', 'Ki nimewo WhatsApp ou?', 'Ki adrès biznis la?', 'Ki kalite biznis ou genyen?', 'Kilè ou vle kòmanse?', 'Èske ou pare pou envesti 15,000 GDES pou sistèm nan?'],
+    ph: ['Egzanp: Boutik Bèl Espwa', 'Egzanp: +509 3X XX XXXX', 'Egzanp: Delmas 33, Pòtoprens', 'Egzanp: Boutik, restoran, famasi…'],
+    hintTel: 'Pou nou ka kontakte w pou demo a.', hintType: 'Ekri l jan ou vle.',
+    title: 'Mande yon demo gratis', next: 'Kontinye', back: '← Retounen', send: 'Voye sou WhatsApp', fine: 'Demo a gratis, san obligasyon.',
+    count: (i, n) => `Kesyon ${i} sou ${n}`, errChoice: 'Chwazi youn nan repons yo.', errEmpty: 'Tanpri reponn kesyon sa a.', errTel: 'Mete yon nimewo WhatsApp ki valab.',
+    msg: ['Bonjou BPRO, mwen vle yon demo.', 'Non biznis', 'WhatsApp', 'Adrès', 'Kalite biznis', 'Kilè m vle kòmanse', 'Pare pou envesti 15,000 GDES'],
+    close: 'Fèmen',
+  };
+  const TYPES = L.types, START = L.start, INVEST = L.invest;
 
   const css = `
   .df { width: min(32rem, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid rgba(242,244,241,.16);
@@ -60,20 +84,20 @@
     `<label class="df__choice"><input type="radio" name="${name}" value="${v}">${v}</label>`).join('')}</div>`;
   // One question per screen. type: text fields need "Kontinye"; choice fields move on when picked.
   const STEPS = [
-    { name: 'biznis', q: 'Ki non biznis ou?', field: `<input type="text" name="biznis" autocomplete="organization" placeholder="Egzanp: Boutik Bèl Espwa">` },
-    { name: 'telefon', q: 'Ki nimewo WhatsApp ou?', hint: 'Pou nou ka kontakte w pou demo a.', field: `<input type="tel" name="telefon" autocomplete="tel" inputmode="tel" placeholder="Egzanp: +509 3X XX XXXX">` },
-    { name: 'adres', q: 'Ki adrès biznis la?', field: `<input type="text" name="adres" autocomplete="street-address" placeholder="Egzanp: Delmas 33, Pòtoprens">` },
-    { name: 'tip', q: 'Ki kalite biznis ou genyen?', hint: 'Ekri l jan ou vle.', field: `<input type="text" name="tip" list="dfTypes" autocomplete="off" placeholder="Egzanp: Boutik, restoran, famasi…"><datalist id="dfTypes">${TYPES.map(t => `<option value="${t}">`).join('')}</datalist>` },
-    { name: 'kile', q: 'Kilè ou vle kòmanse?', choice: true, field: choices('kile', START) },
-    { name: 'envesti', q: 'Èske ou pare pou envesti 15,000 GDES pou sistèm nan?', choice: true, last: true, field: choices('envesti', INVEST) },
+    { name: 'biznis', q: L.q[0], field: `<input type="text" name="biznis" autocomplete="organization" placeholder="${L.ph[0]}">` },
+    { name: 'telefon', q: L.q[1], hint: L.hintTel, field: `<input type="tel" name="telefon" autocomplete="tel" inputmode="tel" placeholder="${L.ph[1]}">` },
+    { name: 'adres', q: L.q[2], field: `<input type="text" name="adres" autocomplete="street-address" placeholder="${L.ph[2]}">` },
+    { name: 'tip', q: L.q[3], hint: L.hintType, field: `<input type="text" name="tip" list="dfTypes" autocomplete="off" placeholder="${L.ph[3]}"><datalist id="dfTypes">${TYPES.map(t => `<option value="${t}">`).join('')}</datalist>` },
+    { name: 'kile', q: L.q[4], choice: true, field: choices('kile', START) },
+    { name: 'envesti', q: L.q[5], choice: true, last: true, field: choices('envesti', INVEST) },
   ];
   const WA_ICON = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg>';
   const html = `
   <dialog class="df" id="demoForm" aria-labelledby="dfTitle">
-    <button type="button" class="df__close" aria-label="Fèmen">×</button>
+    <button type="button" class="df__close" aria-label="${L.close}">×</button>
     <form novalidate>
       <div class="df__head">
-        <p class="df__title" id="dfTitle">Mande yon demo gratis</p>
+        <p class="df__title" id="dfTitle">${L.title}</p>
         <div class="df__bar" aria-hidden="true"><i></i></div>
         <span class="df__count" aria-live="polite"></span>
       </div>
@@ -84,11 +108,11 @@
       </section>`).join('')}
       <p class="df__err" role="alert"></p>
       <div class="df__nav">
-        <button type="button" class="df__back">← Retounen</button>
-        <button type="submit" class="df__next">Kontinye</button>
-        <button type="submit" class="df__send" hidden>${WA_ICON} Voye sou WhatsApp</button>
+        <button type="button" class="df__back">${L.back}</button>
+        <button type="submit" class="df__next">${L.next}</button>
+        <button type="submit" class="df__send" hidden>${WA_ICON} ${L.send}</button>
       </div>
-      <p class="df__fine">Demo a gratis, san obligasyon.</p>
+      <p class="df__fine">${L.fine}</p>
     </form>
   </dialog>`;
 
@@ -114,7 +138,7 @@
       steps.forEach((s, k) => s.classList.toggle('is-on', k === i));
       const st = STEPS[i];
       form.querySelector('.df__bar i').style.width = `${(i / STEPS.length) * 100}%`;
-      form.querySelector('.df__count').textContent = `Kesyon ${i + 1} sou ${STEPS.length}`;
+      form.querySelector('.df__count').textContent = L.count(i + 1, STEPS.length);
       err.textContent = '';
       back.hidden = i === 0;
       next.hidden = !!st.last || !!st.choice;
@@ -131,8 +155,8 @@
     function check(i) {
       const st = STEPS[i];
       const v = value(st.name);
-      if (!v) return st.choice ? 'Chwazi youn nan repons yo.' : 'Tanpri reponn kesyon sa a.';
-      if (st.name === 'telefon' && v.replace(/\D/g, '').length < 8) return 'Mete yon nimewo WhatsApp ki valab.';
+      if (!v) return st.choice ? L.errChoice : L.errEmpty;
+      if (st.name === 'telefon' && v.replace(/\D/g, '').length < 8) return L.errTel;
       return '';
     }
 
@@ -169,14 +193,14 @@
       if (at < STEPS.length - 1) { show(at + 1); return; }
 
       const msg = [
-        'Bonjou BPRO, mwen vle yon demo.',
+        L.msg[0],
         '',
-        `Non biznis: ${value('biznis')}`,
-        `WhatsApp: ${value('telefon')}`,
-        `Adrès: ${value('adres')}`,
-        `Kalite biznis: ${value('tip')}`,
-        `Kilè m vle kòmanse: ${value('kile')}`,
-        `Pare pou envesti 15,000 GDES: ${value('envesti')}`,
+        `${L.msg[1]}: ${value('biznis')}`,
+        `${L.msg[2]}: ${value('telefon')}`,
+        `${L.msg[3]}: ${value('adres')}`,
+        `${L.msg[4]}: ${value('tip')}`,
+        `${L.msg[5]}: ${value('kile')}`,
+        `${L.msg[6]}: ${value('envesti')}`,
       ].join('\n');
       if (GHL_WEBHOOK) {
         const payload = {

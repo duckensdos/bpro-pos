@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="ht">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BPRO POS Ayiti · Sistèm lavant, stock ak jesyon biznis</title>
+<meta name="description" content="BPRO POS ede biznis ou jere lavant, stock, kliyan, founisè, depans, anplwaye ak pwofi sou yon sèl platfòm. Enstalasyon, fòmasyon ak sipò enkli.">
+<meta name="theme-color" content="#0B0C0D">
+<link rel="icon" href="assets/mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/shop.webp" media="(min-width: 761px)">
+<link rel="preload" as="image" href="assets/real-tablet.webp">
+<link rel="stylesheet" href="scrollcraft.css">
+<style>
+  :root {
+    --sc-canvas:     #0B0C0D;
+    --sc-surface:    #141617;
+    --sc-ink:        #F2F4F1;
+    --sc-ink-soft:   #9FA8A2;
+    --sc-accent:     #22C56B;
+    --sc-accent-ink: #04140A;
+    --sc-font-display: "Geist", system-ui, sans-serif;
+    --sc-font-text:    "Geist", system-ui, sans-serif;
+    --sc-font-mono:    "Geist Mono", ui-monospace, monospace;
+    --sc-shadow-color: 150 20% 2%;
+    --bar-h: 60px;
+    --r: 14px;
+    --paper: #F7F6F1;
+    --paper-ink: #1B1D1C;
+  }
+  body { font-weight: 400; }
+  .sc-display { font-weight: 600; }
+  .sc-body, .soft { color: var(--sc-ink-soft); }
+  .wrap { width: min(100% - 2 * var(--sc-gutter), var(--sc-maxw)); margin-inline: auto; }
+
+  /* ----------------------------------------------------------- buttons -- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+    min-height: 48px; padding: 0 1.4em; border-radius: 999px;
+    font-weight: 600; font-size: var(--sc-t-sm); text-decoration: none; white-space: nowrap;
+    border: 1px solid transparent; cursor: pointer;
+    transition: transform 140ms var(--sc-ease-out), background-color 160ms var(--sc-ease-out), border-color 160ms var(--sc-ease-out);
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn--go { background: var(--sc-accent); color: var(--sc-accent-ink); box-shadow: var(--sc-e1); }
+  .btn--ghost { border-color: var(--sc-hairline-strong); color: var(--sc-ink); background: color-mix(in oklab, var(--sc-canvas) 40%, transparent); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn--go:hover { background: #3AD37E; }
+    .btn--ghost:hover { border-color: color-mix(in oklab, var(--sc-ink) 45%, transparent); }
+  }
+  .btn[disabled] { opacity: .4; cursor: not-allowed; }
+
+  /* -------------------------------------------------------------- bar -- */
+  .bar {
+    position: fixed; inset: 0 0 auto; z-index: 60; height: var(--bar-h);
+    display: flex; align-items: center;
+    background: color-mix(in oklab, var(--sc-canvas) 72%, transparent);
+    backdrop-filter: saturate(1.4) blur(18px); -webkit-backdrop-filter: saturate(1.4) blur(18px);
+    border-bottom: 1px solid var(--sc-hairline);
+  }
+  .bar .wrap { display: flex; align-items: center; gap: var(--sc-6); }
+  .bar__logo img { height: 26px; width: auto; }
+  .bar nav { display: flex; gap: var(--sc-5); margin-left: auto; }
+  .bar nav a { color: var(--sc-ink-soft); text-decoration: none; font-size: var(--sc-t-sm); transition: color 140ms var(--sc-ease-out); }
+  .bar nav a:hover { color: var(--sc-ink); }
+  .bar .btn { min-height: 38px; padding: 0 1.1em; }
+  @media (max-width: 860px) { .bar nav { display: none; } .bar .btn { margin-left: auto; } }
+
+  /* ------------------------------------------------------------- hero -- */
+  .hero { position: relative; height: 185vh; }
+  .hero__stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --hp: 0; isolation: isolate; }
+  .hero__bg { position: absolute; inset: 0; transform-origin: 50% 74%;
+    transform: scale(calc(1.02 + var(--hp) * 0.07)); z-index: 0; }
+  .hero__bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 70%; max-width: none; }
+  .hero__shade { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      linear-gradient(90deg, rgb(11 12 13 / .92) 0%, rgb(11 12 13 / .62) 34%, rgb(11 12 13 / 0) 62%),
+      linear-gradient(0deg, rgb(11 12 13 / 1) 0%, rgb(11 12 13 / 0) 22%);
+    opacity: calc(.85 + var(--hp) * .15); }
+  .hero__dim { position: absolute; inset: 0; z-index: 1; background: #0B0C0D; opacity: calc(var(--hp) * 0.55); pointer-events: none; }
+  .hero__glow { position: absolute; z-index: 2; right: 8vw; bottom: 22%; width: 46vw; height: 40vh; pointer-events: none;
+    background: radial-gradient(closest-side, rgb(34 197 107 / .22), transparent);
+    opacity: calc(.35 + var(--hp) * .65); transform: scale(calc(.9 + var(--hp) * .2)); }
+  .hero__device { position: absolute; z-index: 4; --dh: min(64vh, 44vw);
+    height: var(--dh); width: auto; max-width: none;
+    right: 9vw; bottom: calc(26% - var(--dh) * 0.145);
+    transform-origin: 50% 85%;
+    transform: translateX(calc(var(--hp) * -6vw)) scale(calc(1 + var(--hp) * 0.16)) translateX(var(--mx, 0px));
+    filter: drop-shadow(0 30px 40px rgb(0 0 0 / .55)); }
+  .hero__ribbon { position: absolute; z-index: 6; right: -3vw; top: 0; height: 88vh; width: auto; max-width: none;
+    transform: translateY(calc(62vh - var(--hp) * 120vh)) rotate(-14deg);
+    filter: blur(1.2px) brightness(.92); opacity: .96; pointer-events: none; }
+  .hero__copy { position: absolute; z-index: 5; left: var(--sc-gutter); top: calc(var(--bar-h) + 13vh); width: min(40rem, 46vw);
+    transform: translateY(calc(var(--hp) * -10vh)); opacity: clamp(0, calc(1.6 - var(--hp) * 2.9), 1); }
+  .eyebrow { font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); letter-spacing: var(--sc-track-wide); text-transform: uppercase; color: var(--sc-accent); margin: 0 0 var(--sc-4); }
+  .hero h1 { font-size: clamp(2.6rem, 1.6rem + 3.6vw, 5.2rem); margin: 0; }
+  .hero h1 em { font-style: normal; color: var(--sc-accent); }
+  .hero__sub { margin: var(--sc-5) 0 var(--sc-6); max-width: 34ch; color: #C5CCC7; font-size: var(--sc-t-lg); line-height: 1.45; }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--sc-3); }
+  .hero__beat { position: absolute; z-index: 5; left: var(--sc-gutter); bottom: 12vh; margin: 0;
+    font-size: var(--sc-t-xl); font-weight: 600; letter-spacing: var(--sc-track-snug); max-width: 18ch; line-height: 1.12;
+    opacity: clamp(0, calc((var(--hp) - .58) * 3.5), 1); transform: translateY(calc((1 - var(--hp)) * 4vh)); }
+  .hero__beat span { display: block; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); font-weight: 500; letter-spacing: 0; margin-top: var(--sc-3); font-family: var(--sc-font-mono); }
+
+  @media (max-width: 760px) {
+    .hero { height: 170vh; }
+    .hero__shade { background: linear-gradient(180deg, rgb(11 12 13 / .9) 0%, rgb(11 12 13 / .55) 42%, rgb(11 12 13 / 0) 62%), linear-gradient(0deg, rgb(11 12 13) 0%, rgb(11 12 13 / 0) 20%); }
+    .hero__bg img { object-position: 50% 80%; }
+    .hero__device { --dh: min(40vh, 92vw); right: 50%; bottom: calc(22% - var(--dh) * 0.145);
+      transform: translateX(50%) scale(calc(1 + var(--hp) * 0.12)); }
+    .hero__glow { right: 0; left: 0; width: auto; bottom: 18%; }
+    .hero__ribbon { height: 62vh; right: -18vw; }
+    .hero__copy { top: calc(var(--bar-h) + 4vh); width: auto; right: var(--sc-gutter); }
+    .hero h1 { font-size: clamp(2.2rem, 9.4vw, 3rem); }
+    .hero__sub { font-size: var(--sc-t-base); margin: var(--sc-4) 0 var(--sc-5); }
+    .hero__beat { bottom: 7vh; font-size: var(--sc-t-lg); }
+  }
+
+  /* ---------------------------------------------------------- tension -- */
+  .tension .sc-stage, .tension [data-sc-stage] { display: grid; align-items: center; }
+  .tension__lines { position: relative; width: min(100% - 2 * var(--sc-gutter), var(--sc-maxw)); margin-inline: auto; height: 60vh; }
+  .tension__lines > * { position: absolute; left: 0; top: 50%; margin: 0; translate: 0 -50%; max-width: 22ch; }
+  .tension .line { font-size: var(--sc-t-3xl); font-weight: 600; letter-spacing: var(--sc-track-tight); line-height: 1.02; }
+  .tension .line small { display: block; font-family: var(--sc-font-mono); font-size: var(--sc-t-sm); font-weight: 400; letter-spacing: 0; color: var(--sc-ink-soft); margin-bottom: var(--sc-4); }
+  .tension .line--last { color: var(--sc-ink-soft); max-width: 24ch; }
+  .tension .line--last b { color: var(--sc-ink); font-weight: 600; }
+
+  /* ------------------------------------------------------------- turn -- */
+  .turn { padding-top: var(--sc-9); }
+  .turn__head { display: grid; gap: var(--sc-5); max-width: 46rem; }
+  .turn__head h2 { font-size: var(--sc-t-3xl); margin: 0; }
+  .turn__head p { margin: 0; max-width: 58ch; }
+  .modules { margin: var(--sc-8) 0 0; padding: var(--sc-7) var(--sc-6); border-radius: var(--r);
+    background: radial-gradient(120% 120% at 50% 0%, #17231C 0%, var(--sc-surface) 60%);
+    box-shadow: var(--sc-e2), var(--sc-edge); }
+  .modules ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--sc-hairline); border-radius: 10px; overflow: hidden; }
+  .modules li { background: #111414; padding: var(--sc-5) var(--sc-4); font-weight: 500; font-size: var(--sc-t-sm); min-height: 5.2rem; display: flex; align-items: flex-end; }
+  .modules li.is-core { color: var(--sc-accent); }
+  .modules figcaption { margin-top: var(--sc-5); font-size: var(--sc-t-sm); color: var(--sc-ink-soft); }
+  @media (max-width: 900px) { .modules ul { grid-template-columns: repeat(3, 1fr); } .modules { padding: var(--sc-5) var(--sc-4); } }
+  .quiet { padding-block: var(--sc-10) var(--sc-7); text-align: center; }
+  .quiet p { margin: 0; font-size: var(--sc-t-2xl); font-weight: 600; letter-spacing: var(--sc-track-snug); }
+  .quiet p span { color: var(--sc-accent); }
+
+  /* ------------------------------------------------------ demo (peak) -- */
+  .demo { padding-block: var(--sc-7) var(--sc-10); }
+  .demo__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--sc-5); margin-bottom: var(--sc-6); }
+  .demo__head h2 { font-size: var(--sc-t-3xl); margin: 0; }
+  .demo__head p { margin: 0; max-width: 36ch; }
+  .tag { display: inline-block; font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); color: var(--sc-ink-soft); border: 1px solid var(--sc-hairline-strong); border-radius: 999px; padding: .25em .8em; }
+  .register { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) minmax(250px, .78fr); gap: var(--sc-5); align-items: start; }
+  .panel { background: var(--sc-surface); border-radius: var(--r); box-shadow: var(--sc-e2), var(--sc-edge); padding: var(--sc-5); }
+  .panel h3 { margin: 0 0 var(--sc-4); font-size: var(--sc-t-sm); font-weight: 600; color: var(--sc-ink-soft); display: flex; justify-content: space-between; }
+  .grid-products { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.2rem, 1fr)); gap: var(--sc-3); }
+  .prod { text-align: left; border: 1px solid var(--sc-hairline); background: #1A1D1E; border-radius: 10px; padding: var(--sc-4); cursor: pointer; display: grid; gap: 2px;
+    transition: transform 120ms var(--sc-ease-out), border-color 160ms var(--sc-ease-out), background-color 160ms var(--sc-ease-out); }
+  .prod:active { transform: scale(0.97); }
+  @media (hover: hover) and (pointer: fine) { .prod:hover { border-color: color-mix(in oklab, var(--sc-accent) 55%, transparent); } }
+  .prod b { font-weight: 600; font-size: var(--sc-t-sm); }
+  .prod .price { font-family: var(--sc-font-mono); font-size: var(--sc-t-sm); color: var(--sc-accent); }
+  .prod .stock { font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+  .prod .stock.low { color: #F2B45A; }
+  .prod[disabled] { opacity: .45; cursor: not-allowed; }
+  .cart { min-height: 24rem; display: flex; flex-direction: column; }
+  .cart ol { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sc-2); flex: 1; align-content: start; }
+  .cart li { display: grid; grid-template-columns: 1fr auto auto; gap: var(--sc-3); align-items: center; padding: var(--sc-2) 0; border-bottom: 1px solid var(--sc-hairline); font-size: var(--sc-t-sm); }
+  .cart .qty { display: inline-flex; align-items: center; gap: 6px; font-family: var(--sc-font-mono); }
+  .cart .qty button { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--sc-hairline-strong); background: transparent; cursor: pointer; line-height: 1; }
+  .cart .amt { font-family: var(--sc-font-mono); min-width: 6.5ch; text-align: right; }
+  .cart__empty { color: var(--sc-ink-soft); font-size: var(--sc-t-sm); margin: 0; }
+  .pay { display: flex; gap: var(--sc-2); margin: var(--sc-4) 0; flex-wrap: wrap; }
+  .pay label { flex: 1; min-width: 5.5rem; }
+  .pay input { position: absolute; opacity: 0; pointer-events: none; }
+  .pay span { display: block; text-align: center; padding: .55em .6em; border-radius: 8px; border: 1px solid var(--sc-hairline-strong); font-size: var(--sc-t-xs); cursor: pointer; }
+  .pay input:checked + span { background: color-mix(in oklab, var(--sc-accent) 18%, transparent); border-color: var(--sc-accent); color: var(--sc-ink); }
+  .pay input:focus-visible + span { outline: 2px solid var(--sc-accent); outline-offset: 2px; }
+  .total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--sc-hairline-strong); padding-top: var(--sc-4); margin-bottom: var(--sc-4); }
+  .total strong { font-family: var(--sc-font-mono); font-size: var(--sc-t-xl); font-weight: 500; }
+  .sell { width: 100%; }
+  .printer { position: relative; }
+  .printer__slot { height: 22px; border-radius: 10px 10px 4px 4px; background: linear-gradient(#2A2E2F, #1A1D1E); box-shadow: var(--sc-e1), var(--sc-edge); position: relative; z-index: 2; }
+  .printer__slot::after { content: ""; position: absolute; left: 12%; right: 12%; top: 9px; height: 4px; border-radius: 2px; background: #050606; }
+  .printer__out { position: relative; z-index: 1; margin: -4px 14% 0; min-height: 17rem; overflow: hidden; }
+  .receipt { background: var(--paper); color: var(--paper-ink); font-family: var(--sc-font-mono); font-size: 12px; line-height: 1.55; padding: 18px 16px 22px;
+    transform: translateY(-101%); box-shadow: 0 10px 22px -8px rgb(0 0 0 / .5);
+    -webkit-mask: linear-gradient(#000 calc(100% - 8px), transparent 0) top / 100% 100% no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 8px repeat-x;
+    mask: linear-gradient(#000 calc(100% - 8px), transparent 0) top / 100% 100% no-repeat, conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 8px repeat-x; }
+  .receipt.is-printing { animation: print 1.6s steps(24) forwards; }
+  .receipt.is-shown { transform: none; }
+  @keyframes print { to { transform: translateY(0); } }
+  .receipt .c { text-align: center; }
+  .receipt hr { border: 0; border-top: 1px dashed #9A9C97; margin: 8px 0; }
+  .receipt .row { display: flex; justify-content: space-between; gap: 8px; }
+  .receipt .big { font-size: 14px; font-weight: 500; }
+  .printer__hint { text-align: center; color: var(--sc-ink-soft); font-size: var(--sc-t-xs); margin: var(--sc-4) 0 0; }
+  .today { margin-top: var(--sc-5); display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--sc-hairline); border-radius: 10px; overflow: hidden; }
+  .today div { background: var(--sc-surface); padding: var(--sc-3) var(--sc-4); }
+  .today dt { font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+  .today dd { margin: 0; font-family: var(--sc-font-mono); font-size: var(--sc-t-base); }
+  .demo__note { margin: var(--sc-5) 0 0; font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+  @media (max-width: 1080px) { .register { grid-template-columns: 1fr 1fr; } .printer { grid-column: 1 / -1; max-width: 26rem; justify-self: center; width: 100%; } }
+  @media (max-width: 680px) { .register { grid-template-columns: 1fr; } .grid-products { grid-template-columns: repeat(2, 1fr); } .cart { min-height: 0; } }
+
+  /* ----------------------------------------------------------- range -- */
+  .rail { display: flex; gap: var(--sc-4); padding-inline: var(--sc-gutter); align-items: center; height: 100%; padding-top: var(--bar-h); box-sizing: border-box; }
+  .rail__lead { flex: 0 0 min(28rem, 80vw); align-self: center; padding-right: var(--sc-7); }
+  .rail__lead h2 { font-size: var(--sc-t-3xl); margin: 0 0 var(--sc-4); }
+  .rail__lead p { margin: 0; }
+  .biz { flex: 0 0 clamp(15rem, 20vw, 18.5rem); display: flex; height: clamp(17rem, 46vh, 23rem); }
+  .biz > div { flex: 1; border-radius: var(--r); padding: var(--sc-6) var(--sc-5); background: linear-gradient(170deg, #1A1E1D, #121414); box-shadow: var(--sc-e2), var(--sc-edge);
+    display: flex; flex-direction: column; justify-content: space-between; gap: var(--sc-6); }
+  .biz h3 { margin: 0; font-size: var(--sc-t-xl); font-weight: 600; letter-spacing: var(--sc-track-snug); line-height: 1.08; }
+  .biz dl { margin: 0; }
+  .biz dt { font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); color: var(--sc-accent); margin-bottom: var(--sc-2); }
+  .biz dd { margin: 0; color: #C5CCC7; font-size: var(--sc-t-sm); line-height: 1.5; }
+  .biz--img > div { padding: 0; overflow: hidden; justify-content: flex-start; gap: 0; }
+  .biz--img img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+  .biz--img .biz__body { padding: var(--sc-5); display: grid; gap: var(--sc-5); }
+  .biz__link { color: inherit; text-decoration: none; }
+  .biz__link::after { content: " →"; color: var(--sc-accent); }
+  .biz > div { position: relative; }
+  .biz__link::before { content: ""; position: absolute; inset: 0; border-radius: var(--r); }
+  .biz__link:focus-visible { outline: none; }
+  .biz__link:focus-visible::before { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
+  .rail__note { flex: 0 0 min(24rem, 78vw); align-self: center; padding-left: var(--sc-6); }
+  .rail__note p { margin: 0 0 var(--sc-5); font-size: var(--sc-t-lg); }
+  @media (prefers-reduced-motion: no-preference) {
+    .biz { opacity: clamp(.55, calc(var(--sc-p, 0) * 9 - var(--i) * .7 + 1.2), 1); }
+  }
+
+  /* ---------------------------------------------------------- ledger -- */
+  .ledger { padding-block: var(--sc-section); }
+  .ledger__head { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sc-6); align-items: end; margin-bottom: var(--sc-8); }
+  .ledger__head h2 { font-size: var(--sc-t-3xl); margin: 0; }
+  .ledger__head p { margin: 0; justify-self: end; max-width: 40ch; }
+  .ledger ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--sc-8); }
+  .ledger li { display: grid; grid-template-columns: 13rem 1fr; gap: var(--sc-5); padding: var(--sc-5) 0; border-top: 1px solid var(--sc-hairline); }
+  .ledger li b { font-weight: 600; }
+  .ledger li span { color: var(--sc-ink-soft); }
+  @media (max-width: 900px) {
+    .ledger__head { grid-template-columns: 1fr; } .ledger__head p { justify-self: start; }
+    .ledger ul { grid-template-columns: 1fr; } .ledger li { grid-template-columns: 1fr; gap: var(--sc-1); }
+  }
+
+  /* ------------------------------------------------------------ plans -- */
+  .plans { padding-block: var(--sc-section); background: linear-gradient(180deg, var(--sc-canvas), #0E1110 40%, var(--sc-canvas)); }
+  .plans__head { text-align: center; max-width: 44rem; margin: 0 auto var(--sc-8); }
+  .plans__head h2 { font-size: var(--sc-t-3xl); margin: 0 0 var(--sc-4); }
+  .plans__head p { margin: 0 auto; }
+  .chooser { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--sc-8); align-items: center; }
+  .showcase { position: relative; aspect-ratio: 1; border-radius: 24px; background: radial-gradient(60% 55% at 50% 58%, #183022 0%, #101312 70%); box-shadow: var(--sc-e3), var(--sc-edge); overflow: hidden; }
+  .showcase img { position: absolute; inset: 6%; width: 88%; height: 88%; object-fit: contain; max-width: none;
+    opacity: 0; transform: translateY(14px) scale(.96); transition: opacity 360ms var(--sc-ease-out), transform 520ms var(--sc-ease-out); }
+  .showcase img.is-on { opacity: 1; transform: none; }
+  .showcase .own { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: var(--sc-3); padding: var(--sc-7);
+    opacity: 0; transition: opacity 360ms var(--sc-ease-out); }
+  .showcase .own.is-on { opacity: 1; }
+  .showcase .own strong { font-size: var(--sc-t-2xl); font-weight: 600; letter-spacing: var(--sc-track-snug); }
+  .showcase .own span { color: var(--sc-ink-soft); max-width: 30ch; margin-inline: auto; }
+  .options { display: grid; gap: var(--sc-2); margin: 0; padding: 0; border: 0; }
+  .options legend { font-size: var(--sc-t-sm); color: var(--sc-ink-soft); margin-bottom: var(--sc-3); padding: 0; }
+  .opt { display: block; cursor: pointer; }
+  .opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .opt > span { display: grid; grid-template-columns: 1fr auto; gap: 2px var(--sc-4); padding: var(--sc-4) var(--sc-5); border-radius: 12px; border: 1px solid var(--sc-hairline-strong);
+    transition: border-color 160ms var(--sc-ease-out), background-color 160ms var(--sc-ease-out); }
+  .opt b { font-weight: 600; }
+  .opt i { font-style: normal; font-family: var(--sc-font-mono); }
+  .opt small { grid-column: 1 / -1; color: var(--sc-ink-soft); font-size: var(--sc-t-xs); }
+  .opt .pop { font-family: var(--sc-font-mono); font-size: 10px; letter-spacing: .08em; color: var(--sc-accent-ink); background: var(--sc-accent); border-radius: 4px; padding: 1px 6px; margin-left: 8px; vertical-align: 2px; }
+  .opt input:checked + span { border-color: var(--sc-accent); background: color-mix(in oklab, var(--sc-accent) 9%, transparent); }
+  .opt input:focus-visible + span { outline: 2px solid var(--sc-accent); outline-offset: 3px; }
+  .spec { margin-top: var(--sc-6); }
+  .spec ul { list-style: none; margin: 0 0 var(--sc-4); padding: 0; display: flex; flex-wrap: wrap; gap: var(--sc-2) var(--sc-4); font-size: var(--sc-t-sm); }
+  .spec li::before { content: "✓ "; color: var(--sc-accent); }
+  .spec p { margin: 0 0 var(--sc-5); font-size: var(--sc-t-sm); }
+  .spec .fine { font-size: var(--sc-t-xs); margin-top: var(--sc-4); margin-bottom: 0; }
+  @media (max-width: 900px) { .chooser { grid-template-columns: 1fr; gap: var(--sc-6); } .showcase { max-width: 30rem; width: 100%; margin-inline: auto; } }
+
+  /* ---------------------------------------------------------- more/faq -- */
+  .more { padding-block: var(--sc-section) var(--sc-7); }
+  .more__grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--sc-8); }
+  .more h2 { font-size: var(--sc-t-2xl); margin: 0 0 var(--sc-4); }
+  .groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sc-6); }
+  .groups h3 { margin: 0 0 var(--sc-3); font-size: var(--sc-t-base); font-weight: 600; padding-bottom: var(--sc-3); border-bottom: 1px solid var(--sc-hairline-strong); }
+  .groups ul { list-style: none; margin: 0; padding: 0; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); line-height: 2; }
+  .faq { padding-block: var(--sc-8) var(--sc-section); }
+  .faq__grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--sc-8); }
+  .faq h2 { font-size: var(--sc-t-2xl); margin: 0; }
+  .faq details { border-top: 1px solid var(--sc-hairline); }
+  .faq details:last-child { border-bottom: 1px solid var(--sc-hairline); }
+  .faq summary { list-style: none; cursor: pointer; padding: var(--sc-5) 0; font-weight: 500; display: flex; justify-content: space-between; gap: var(--sc-4); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-family: var(--sc-font-mono); color: var(--sc-accent); transition: transform 180ms var(--sc-ease-out); }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { margin: 0 0 var(--sc-5); color: var(--sc-ink-soft); max-width: 60ch; }
+  @media (max-width: 900px) { .more__grid, .faq__grid { grid-template-columns: 1fr; gap: var(--sc-5); } .groups { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .groups { grid-template-columns: 1fr; } }
+
+  /* ------------------------------------------------------------ close -- */
+  .close { display: grid; grid-template-rows: 1fr auto; min-height: 100svh;
+    background: radial-gradient(40rem 30rem at var(--sc-mx, 70%) var(--sc-my, 45%), rgb(34 197 107 / .10), transparent 70%); }
+  .close__inner { width: min(100% - 2 * var(--sc-gutter), var(--sc-maxw)); margin: auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--sc-8); align-items: center; padding-top: var(--bar-h); }
+  .close h2 { font-size: var(--sc-t-3xl); margin: 0 0 var(--sc-5); }
+  .close h2 span { color: var(--sc-ink-soft); display: block; }
+  .close__ctas { display: flex; flex-wrap: wrap; gap: var(--sc-3); margin-top: var(--sc-6); }
+  .close__ctas .btn--go { min-height: 56px; padding: 0 2em; font-size: var(--sc-t-base); }
+  .close__mail { margin: var(--sc-5) 0 0; font-size: var(--sc-t-sm); color: var(--sc-ink-soft); }
+  .close__mail a { color: var(--sc-ink); }
+  .close__incl { font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); letter-spacing: var(--sc-track-wide); color: var(--sc-ink-soft); margin: 0; }
+  .summary { justify-self: end; width: min(100%, 22rem); transform: rotate(1.5deg); }
+  .summary .receipt { transform: none; font-size: 12.5px; }
+  .foot { width: min(100% - 2 * var(--sc-gutter), var(--sc-maxw)); margin: 0 auto; padding: var(--sc-6) 0; border-top: 1px solid var(--sc-hairline); display: flex; flex-wrap: wrap; gap: var(--sc-4) var(--sc-6); align-items: center; font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+  .foot img { height: 20px; width: auto; }
+  .foot nav { display: flex; gap: var(--sc-5); margin-left: auto; }
+  .foot a { color: var(--sc-ink-soft); }
+  @media (max-width: 900px) { .close__inner { grid-template-columns: 1fr; gap: var(--sc-6); padding-block: calc(var(--bar-h) + var(--sc-5)) var(--sc-5); } .summary { justify-self: start; transform: none; } .foot nav { margin-left: 0; } }
+  /* Phones: the close is taller than one screen, so it flows instead of pinning
+     rather than clipping the receipt and footer. */
+  @media (max-width: 760px), (max-height: 700px) {
+    #demo [data-sc-stage].close { position: relative; height: auto; min-height: 100svh; }
+    .close h2 { font-size: var(--sc-t-2xl); }
+    .close__inner { gap: var(--sc-5); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero { height: auto; }
+    .hero__stage { position: relative; }
+    .hero__stage { --hp: 0 !important; }
+    .hero__beat { opacity: 1; transform: none; position: absolute; }
+    .hero__ribbon { display: none; }
+    .receipt.is-printing { animation: none; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<span data-sc-progress></span>
+<div class="sc-grain" aria-hidden="true"></div>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="bar__logo" href="#top" aria-label="BPRO POS, retounen anlè"><img src="assets/logo.webp" width="990" height="210" alt="Point of sales"></a>
+    <nav aria-label="Seksyon yo">
+      <a href="#fonksyon">Fonksyon</a>
+      <a href="#biznis">Kalite biznis</a>
+      <a href="#plan">Plan</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn--go" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- 1 · RECOGNITION: layered hero. Shop plate, counter pivot, terminal, receipt ribbon foreground. -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__stage" id="heroStage">
+      <picture class="hero__bg">
+        <source media="(max-width: 760px)" srcset="assets/shop-m.webp">
+        <img src="assets/shop.webp" width="1344" height="752" alt="">
+      </picture>
+      <div class="hero__shade" aria-hidden="true"></div>
+      <div class="hero__dim" aria-hidden="true"></div>
+      <div class="hero__glow" aria-hidden="true"></div>
+      <img class="hero__device" src="assets/real-tablet.webp" width="1024" height="1024" alt="Tèminal BPRO POS Tablet tout-an-yon ak printer entegre, sou kontwa yon boutik">
+      <div class="hero__copy">
+        <p class="eyebrow">Sistèm POS tout-an-yon</p>
+        <h1 id="hero-title" class="sc-display">Vann pi rapid. Konnen kote <em>lajan ou</em> pase.</h1>
+        <p class="hero__sub">Lavant, stock, kliyan, founisè, depans, anplwaye ak pwofi sou yon sèl platfòm.</p>
+        <div class="hero__ctas">
+          <a class="btn btn--go" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+          <a class="btn btn--ghost" href="#plan">Gade plan yo</a>
+        </div>
+      </div>
+      <p class="hero__beat" aria-hidden="true">Fèt pou boutik, famasi, restoran, gym, salon, garaj ak plis toujou.<span>Enstalasyon · Konfigirasyon · Fòmasyon · Sipò</span></p>
+      <img class="hero__ribbon" src="assets/receipt.webp" width="880" height="1168" alt="" aria-hidden="true">
+    </div>
+  </section>
+
+  <!-- 2 · TENSION: pin, lines replace each other. -->
+  <section class="tension" data-sc-act="pin" data-sc-span="3" data-sc-drift="#0B0C0D">
+    <div data-sc-stage>
+      <div class="tension__lines">
+        <p class="line" data-sc-cue="0 0.22 0 0.04"><small>Jodi a, nan anpil biznis:</small>Yon kaye pou lavant.</p>
+        <p class="line" data-sc-cue="0.22 0.42 0.04 0.04">Excel pou stock.</p>
+        <p class="line" data-sc-cue="0.42 0.62 0.04 0.04">WhatsApp pou kòmand.</p>
+        <p class="line" data-sc-cue="0.62 0.8 0.04 0.04">Yon lòt sistèm pou kliyan.</p>
+        <p class="line line--last" data-sc-cue="0.8 1 0.05 0.02">Epi nan fen mwa a, <b>ou pa konnen kote lajan an pase.</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · TURN: flow + iris reveal of every module in one grid. -->
+  <section class="turn" id="fonksyon" data-sc-act="flow" data-sc-drift="#0D0F0E">
+    <div class="wrap">
+      <div class="turn__head" data-sc-in data-sc-stagger="70">
+        <h2 class="sc-display">Finalman, tout sa ou bezwen sou yon sèl platfòm.</h2>
+        <p class="sc-body">Sispann chanje aplikasyon, kaye oswa fichye tout jounen. BPRO mete operasyon ou yo ansanm pou ou travay ak mwens dezòd, plis kontwòl ak pi bon enfòmasyon.</p>
+      </div>
+      <figure class="modules" data-sc-reveal="iris" data-sc-reveal-at="0.1 0.5">
+        <ul>
+          <li class="is-core">POS</li><li class="is-core">Stock</li><li class="is-core">Fakti</li><li class="is-core">Kliyan</li><li class="is-core">Founisè</li><li class="is-core">Depans</li>
+          <li>Anplwaye</li><li>CRM</li><li>Accounting</li><li>Manufacturing</li><li>Repair</li><li>Gym</li>
+          <li>Hotel</li><li>Project Management</li><li>Asset Management</li><li>QR Catalogue</li><li>WhatsApp Orders</li><li>AI Assistant</li>
+        </ul>
+        <figcaption>Modil ki disponib yo depann de plan, materyèl ak konfigirasyon biznis ou.</figcaption>
+      </figure>
+    </div>
+    <div class="quiet" data-sc-in><p>Pa kwè nou. <span>Eseye l.</span></p></div>
+  </section>
+
+  <!-- 4 · PEAK: a working register on sample data. -->
+  <section class="demo" id="eseye" aria-labelledby="demo-title">
+    <div class="wrap">
+      <div class="demo__head" data-sc-in data-sc-stagger="60">
+        <div>
+          <span class="tag">Demo · done egzanp</span>
+          <h2 id="demo-title" class="sc-display" style="margin-top: var(--sc-4)">Fè yon lavant.</h2>
+        </div>
+        <p class="sc-body">Klike sou pwodwi yo, chwazi fason kliyan an peye, epi peze Vann. Gade resi a soti, stock la desann, rapò jounen an mete l ajou.</p>
+      </div>
+
+      <div class="register">
+        <div class="panel">
+          <h3><span>Pwodwi</span><span>Stock</span></h3>
+          <div class="grid-products" id="products"></div>
+        </div>
+
+        <div class="panel cart" aria-live="polite">
+          <h3><span>Panye</span><span id="cartCount">0 atik</span></h3>
+          <ol id="cartList"></ol>
+          <p class="cart__empty" id="cartEmpty">Panye a vid. Klike sou yon pwodwi.</p>
+          <fieldset class="pay" style="border:0;padding:0">
+            <legend class="sc-label" style="font-size:var(--sc-t-xs);color:var(--sc-ink-soft);margin-bottom:6px;padding:0">Peman</legend>
+            <label><input type="radio" name="pay" value="Kach" checked><span>Kach</span></label>
+            <label><input type="radio" name="pay" value="Kat"><span>Kat</span></label>
+            <label><input type="radio" name="pay" value="Kredi kliyan"><span>Kredi kliyan</span></label>
+          </fieldset>
+          <div class="total"><span>Total</span><strong id="cartTotal">0 GDES</strong></div>
+          <button class="btn btn--go sell" id="sellBtn" disabled>Vann</button>
+          <dl class="today">
+            <div><dt>Vant jodi a</dt><dd id="todayCount">0</dd></div>
+            <div><dt>Total jodi a</dt><dd id="todayTotal">0 GDES</dd></div>
+          </dl>
+        </div>
+
+        <div class="printer">
+          <div class="printer__slot" aria-hidden="true"></div>
+          <div class="printer__out" id="printerOut" aria-live="polite"></div>
+          <p class="printer__hint" id="printerHint">Resi a ap soti isit la.</p>
+        </div>
+      </div>
+      <p class="demo__note">Pwodwi, pri ak stock sa yo se egzanp pou demonstrasyon sèlman. Nan BPRO, ou mete pwodwi, sèvis ak pri pa ou.</p>
+    </div>
+  </section>
+
+  <!-- 5 · RANGE: pan rail of business types. -->
+  <section class="range" id="biznis" data-sc-act="pan" data-sc-span="3.6" data-sc-drift="#0C0E0D">
+    <div data-sc-stage>
+      <div class="rail" data-sc-pan="0.04">
+        <div class="rail__lead">
+          <h2 class="sc-display">Kèlkeswa sa ou vann.</h2>
+          <p class="sc-body">Pwodwi. Sèvis. Stock. Kliyan. Lajan. Yon sèl sistèm ki adapte ak fason biznis pa ou fonksyone.</p>
+        </div>
+        <article class="biz" style="--i:0"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/boutik-market.html">Boutik ak market</a></h3><dl><dt>Ou jere</dt><dd>Lavant, eskane pwodwi, enprime resi, verifye stock.</dd></dl></div></article>
+        <article class="biz" style="--i:1"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/famasi.html">Famasi</a></h3><dl><dt>Ou jere</dt><dd>Rechèch pwodwi, dat ekspirasyon, lavant, fakti.</dd></dl></div></article>
+        <article class="biz" style="--i:2"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/quincaillerie.html">Quincaillerie</a></h3><dl><dt>Ou jere</dt><dd>Barcode, vant an gwo ak an detay, kredi kliyan.</dd></dl></div></article>
+        <article class="biz" style="--i:3"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/auto-parts.html">Auto parts</a></h3><dl><dt>Ou jere</dt><dd>Rechèch pyès, pri acha ak pri vant, founisè.</dd></dl></div></article>
+        <article class="biz" style="--i:4"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/restoran.html">Restoran</a></h3><dl><dt>Ou jere</dt><dd>Pran kòmand, jesyon tab, voye kòmand nan kwizin.</dd></dl></div></article>
+        <article class="biz" style="--i:5"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/barbershop-salon.html">Barbershop ak salon</a></h3><dl><dt>Ou jere</dt><dd>Vann sèvis ak pwodwi, komisyon anplwaye.</dd></dl></div></article>
+        <article class="biz biz--img" style="--i:6"><div data-sc-tilt="5"><img src="assets/gym.webp" width="960" height="540" alt="Videyo: Reprann kontwòl gym ou avèk Point of sales"><div class="biz__body"><h3><a class="biz__link" href="biznis/gym.html">Gym</a></h3><dl><dt>Ou jere</dt><dd>Manm, abònman, peman, prezans.</dd></dl></div></div></article>
+        <article class="biz" style="--i:7"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/rad-tenis.html">Magazen rad ak tenis</a></h3><dl><dt>Ou jere</dt><dd>Size, koulè, modèl, stock, lavant.</dd></dl></div></article>
+        <article class="biz" style="--i:8"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/garaj-repair.html">Garaj ak repair shop</a></h3><dl><dt>Ou jere</dt><dd>Anrejistre reparasyon, swiv estati travay, pyès.</dd></dl></div></article>
+        <article class="biz" style="--i:9"><div data-sc-tilt="5"><h3><a class="biz__link" href="biznis/manufacturing.html">Manufacturing</a></h3><dl><dt>Ou jere</dt><dd>Recipes, matyè premyè, pwodiksyon, depans.</dd></dl></div></article>
+        <article class="biz biz--img" style="--i:10"><div data-sc-tilt="5"><img src="assets/patisserie.webp" width="960" height="540" alt="Videyo: BPRO POS pou patisri"><div class="biz__body"><h3><a class="biz__link" href="biznis/patisri.html">Patisri</a></h3><dl><dt>Ou jere</dt><dd>Gato ak pastèz, resèt, stock engredyan, kòmand avans.</dd></dl></div></div></article>
+        <div class="rail__note">
+          <p>Pa sèlman gade kijan BPRO mache. Gade kijan li ka mache pou biznis pa ou.</p>
+          <a class="btn btn--ghost" href="https://www.youtube.com/@Mrdosmarketing" target="_blank" rel="noopener">Gade videyo yo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · SUBSTANCE: the twelve functions as a ledger. -->
+  <section class="ledger" data-sc-act="flow" data-sc-drift="#0B0C0D">
+    <div class="wrap">
+      <div class="ledger__head" data-sc-in data-sc-stagger="60">
+        <h2 class="sc-display">Avèk BPRO, jesyon biznis vin pi fasil.</h2>
+        <p class="sc-body">Zouti pou vann, òganize operasyon ou ak pran pi bon desizyon.</p>
+      </div>
+      <ul data-sc-in data-sc-stagger="40">
+        <li><b>POS ak lavant rapid</b><span>Fè lavant, ajoute pwodwi oswa sèvis, aksepte peman epi enprime resi.</span></li>
+        <li><b>Jesyon stock</b><span>Konnen sa ki antre, sa ki soti, sa ki vann ak sa ki prèske fini.</span></li>
+        <li><b>Pwodwi ak sèvis</b><span>Vann pwodwi, sèvis, reparasyon, abònman oswa toude.</span></li>
+        <li><b>Fakti ak resi</b><span>Kreye fakti ak resi pwofesyonèl pou chak tranzaksyon.</span></li>
+        <li><b>Jesyon kliyan</b><span>Swiv acha, peman, kredi, balans ak istwa kliyan yo.</span></li>
+        <li><b>Jesyon founisè</b><span>Kontwole acha, dèt, peman ak pwodwi ou resevwa.</span></li>
+        <li><b>Depans</b><span>Anrejistre depans biznis la epi konprann kote lajan ou pase.</span></li>
+        <li><b>Barcode</b><span>Eskane pwodwi rapid epi diminye erè nan lavant.</span></li>
+        <li><b>Anplwaye ak aksè</b><span>Bay chak itilizatè aksè sèlman ak sa li bezwen.</span></li>
+        <li><b>Plizyè branch</b><span>Swiv lavant, stock ak ekip nan plizyè lokal.</span></li>
+        <li><b>Kredi kliyan</b><span>Konnen kiyès ki dwe ou ak balans ki rete.</span></li>
+        <li><b>Rapò ak pwofi</b><span>Gade lavant, depans, stock ak pèfòmans biznis ou.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 · CHOICE: kit selector; the choice carries to the close. -->
+  <section class="plans" id="plan" aria-labelledby="plan-title">
+    <div class="wrap">
+      <div class="plans__head" data-sc-in data-sc-stagger="60">
+        <h2 id="plan-title" class="sc-display">Chwazi solisyon ki bon pou biznis ou.</h2>
+        <p class="sc-body">Itilize materyèl ou deja genyen, oswa chwazi yon kit BPRO ki vini ak materyèl. Chak plan gen konfigirasyon, fòmasyon ak sipò teknik.</p>
+      </div>
+      <div class="chooser">
+        <div class="showcase" data-sc-tilt="4" aria-hidden="true">
+          <div class="own" data-kit="software"><strong>Ou deja gen materyèl?</strong><span>Òdinatè, tablèt, printer oswa terminal POS konpatib. Ou jis bezwen lojisyèl la.</span></div>
+          <img data-kit="mobile7" src="assets/real-mobile7.webp" width="1024" height="1024" alt="" loading="lazy">
+          <img data-kit="fixe" src="assets/real-fixe.webp" width="1024" height="1024" alt="" loading="lazy">
+          <img data-kit="tablet" src="assets/real-tablet.webp" width="1024" height="1024" alt="">
+          <img data-kit="restaurant" src="assets/real-restaurant.webp" width="1024" height="1024" alt="" loading="lazy">
+        </div>
+        <div>
+          <fieldset class="options" id="kitOptions">
+            <legend>Plan ak materyèl</legend>
+            <label class="opt"><input type="radio" name="kit" value="software"><span><b>BPRO Software</b><i>15,000 GDES / ane</i><small>Pou biznis ki deja gen materyèl konpatib. Materyèl pa enkli.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="mobile7"><span><b>BPRO Mobile 7</b><i>$250 USD</i><small>Ti aparèy Android mobil ak printer entegre.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="fixe"><span><b>BPRO POS Fixe 15.6"</b><i>$350 USD</i><small>Gwo terminal tactile pou cashier ak kontwa fiks.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="tablet" checked><span><b>BPRO POS Tablet 11"<span class="pop">PI POPILÈ</span></b><i>$450 USD</i><small>Terminal compact tout-an-yon ak printer entegre.</small></span></label>
+            <label class="opt"><input type="radio" name="kit" value="restaurant"><span><b>Restaurant Mobile</b><i>$500 USD</i><small>Pou sèvè ki pran kòmand pandan y ap deplase.</small></span></label>
+          </fieldset>
+          <div class="spec" id="kitSpec" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · MORE + QUESTIONS: compact. -->
+  <section class="more" aria-labelledby="more-title">
+    <div class="wrap more__grid">
+      <div data-sc-in data-sc-stagger="60">
+        <h2 id="more-title" class="sc-display">Plis pase yon POS.</h2>
+        <p class="sc-body">Ou pa oblije itilize tout modil yo premye jou a. Kòmanse ak sa ou bezwen epi ajoute plis pandan biznis ou ap grandi.</p>
+      </div>
+      <div class="groups" data-sc-in data-sc-stagger="60">
+        <div><h3>Katalòg QR + WhatsApp</h3><ul><li>QR code pèsonalize</li><li>Logo ak koulè biznis</li><li>Katalòg pwodwi</li><li>Kòmand atravè WhatsApp</li><li>Detay kliyan ak adrès</li></ul></div>
+        <div><h3>CRM</h3><ul><li>Leads</li><li>Follow-ups</li><li>Campaigns</li><li>Contacts</li><li>Proposals</li><li>Reports</li></ul></div>
+        <div><h3>WooCommerce</h3><ul><li>Pwodwi</li><li>Stock</li><li>Kòmand</li><li>Sync logs</li><li>Magazen fizik ak online</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq__grid">
+      <div data-sc-in><h2 id="faq-title" class="sc-display">Kesyon yo poze souvan.</h2></div>
+      <div>
+        <details><summary>Èske BPRO bon pou kalite biznis mwen an?</summary><p>Si ou vann pwodwi, sèvis, oswa toude, BPRO gen plizyè zouti ki ka adapte ak operasyon ou. Mande yon demo pou nou montre ou yon konfigirasyon ki pi pre kalite biznis ou.</p></details>
+        <details><summary>Èske BPRO sèlman pou magazen?</summary><p>Non. BPRO ka sèvi restoran, gym, barbershop, salon, otèl, klinik, garaj, repair shop, faktori, distribitè ak lòt biznis sèvis.</p></details>
+        <details><summary>Èske mwen oblije achte materyèl?</summary><p>Non. Si ou deja gen materyèl konpatib, ou ka itilize BPRO Software pou 15,000 GDES pa ane.</p></details>
+        <details><summary>E si mwen pa gen materyèl?</summary><p>Ou ka chwazi Mobile 7, POS Fixe 15.6 pous, POS Tablet 11 pous oswa Restaurant Mobile.</p></details>
+        <details><summary>Èske mwen jwenn fòmasyon?</summary><p>Wi. Nou ede ou konfigire sistèm nan epi fòme ekip ou pou itilize li.</p></details>
+        <details><summary>Èske mwen ka vann pwodwi ak sèvis ansanm?</summary><p>Wi. BPRO ka jere pwodwi, sèvis, reparasyon, abònman ak lòt kalite tranzaksyon.</p></details>
+        <details><summary>Èske mwen ka jere plizyè anplwaye?</summary><p>Wi. Ou ka kreye itilizatè ak diferan nivo aksè.</p></details>
+        <details><summary>Èske mwen ka jere plizyè branch?</summary><p>Wi, selon konfigirasyon operasyon ak plan biznis ou.</p></details>
+        <details><summary>Èske BPRO ka enprime resi?</summary><p>Wi. Ou ka itilize printer tèmik konpatib oswa yon aparèy ki gen printer entegre.</p></details>
+        <details><summary>Èske kliyan ka kòmande sou WhatsApp?</summary><p>Wi, avèk modil Katalòg QR ak WhatsApp Ordering la.</p></details>
+        <details><summary>Èske tout bonus yo enkli nan tout plan?</summary><p>Gen kèk modil ak fonksyon ki ka depann de plan, materyèl ak konfigirasyon biznis ou.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · COMMITMENT: pin + spotlight + magnet. Last element on the page. -->
+  <section id="demo" data-sc-act="pin" data-sc-span="1.3" data-sc-drift="#0B0C0D">
+    <div data-sc-stage class="close" data-sc-spotlight>
+      <div class="close__inner">
+        <div>
+          <h2 class="sc-display" data-sc-cue="0 1 0 0">Yon biznis k ap grandi bezwen plis pase yon kaye. <span>Li bezwen yon sistèm.</span></h2>
+          <p class="close__incl" data-sc-cue="0 1 0 0">Konfigirasyon · Fòmasyon · Sipò · Demo a gratis, san obligasyon</p>
+          <div class="close__ctas" data-sc-cue="0 1 0 0" data-sc-rise="0">
+            <a class="btn btn--go" data-sc-magnet="0.26" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+            <a class="btn btn--ghost" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Kòmande yon Kit</a>
+          </div>
+          <p class="close__mail" data-sc-cue="0 1 0 0">Oswa ekri nou: <a href="mailto:support@pointofsales.fr">support@pointofsales.fr</a></p>
+        </div>
+        <div class="summary" data-sc-cue="0 1 0 0" aria-live="polite">
+          <div class="receipt is-shown" id="summaryReceipt"></div>
+        </div>
+      </div>
+      <footer class="foot">
+        <img src="assets/logo.webp" width="990" height="210" alt="Point of sales">
+        <span>© 2026 BPRO POS Ayiti</span>
+        <a href="mailto:support@pointofsales.fr">support@pointofsales.fr</a>
+        <nav aria-label="Rezo sosyal">
+          <a href="https://www.facebook.com/profile.php?id=61585018724720" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://www.instagram.com/pointofsales26" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.youtube.com/@Mrdosmarketing" target="_blank" rel="noopener">YouTube</a>
+        </nav>
+      </footer>
+    </div>
+  </section>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>ScrollCraft.mount(document.body);</script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------- hero: one progress value drives every plane ---------- */
+  const hero = document.querySelector('.hero');
+  const stage = document.getElementById('heroStage');
+  let heroTick = false;
+  const heroUpdate = () => {
+    heroTick = false;
+    if (reduce) return;
+    const r = hero.getBoundingClientRect();
+    const travel = Math.max(1, r.height - innerHeight);
+    const p = Math.min(1, Math.max(0, -r.top / travel));
+    stage.style.setProperty('--hp', p.toFixed(4));
+  };
+  addEventListener('scroll', () => { if (!heroTick) { heroTick = true; requestAnimationFrame(heroUpdate); } }, { passive: true });
+  addEventListener('resize', heroUpdate);
+  heroUpdate();
+
+  // Subtle pointer lean on fine pointers only. Additive; never required.
+  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const dev = stage.querySelector('.hero__device');
+    let tx = 0, cx = 0, raf = 0;
+    stage.addEventListener('pointermove', e => { tx = (e.clientX / innerWidth - 0.5) * -14; if (!raf) raf = requestAnimationFrame(step); });
+    stage.addEventListener('pointerleave', () => { tx = 0; if (!raf) raf = requestAnimationFrame(step); });
+    function step() { cx += (tx - cx) * 0.08; dev.style.setProperty('--mx', cx.toFixed(2) + 'px'); raf = Math.abs(tx - cx) > 0.05 ? requestAnimationFrame(step) : 0; }
+  }
+
+  /* ---------------- the register: real logic on sample data -------------- */
+  const fmt = n => n.toLocaleString('en-US') + ' GDES';
+  const products = [
+    { id: 'diri',   name: 'Diri 5 liv',        price: 750, stock: 18 },
+    { id: 'lwil',   name: 'Lwil 1 lit',        price: 450, stock: 12 },
+    { id: 'sik',    name: 'Sik 2 liv',         price: 250, stock: 24 },
+    { id: 'pwa',    name: 'Pwa nwa 2 liv',     price: 400, stock: 9 },
+    { id: 'kafe',   name: 'Kafe moulen',       price: 300, stock: 6 },
+    { id: 'espa',   name: 'Espageti',          price: 90,  stock: 40 },
+    { id: 'savon',  name: 'Savon lave',        price: 75,  stock: 30 },
+    { id: 'ji',     name: 'Ji fwi',            price: 125, stock: 15 },
+    { id: 'pen',    name: 'Pen',               price: 50,  stock: 4 },
+  ];
+  const cart = new Map();
+  const sales = [];
+  let invoice = 1040;
+  const $ = id => document.getElementById(id);
+  const grid = $('products');
+
+  function renderProducts() {
+    grid.innerHTML = '';
+    for (const p of products) {
+      const left = p.stock - (cart.get(p.id) || 0);
+      const b = document.createElement('button');
+      b.className = 'prod'; b.type = 'button'; b.disabled = left <= 0;
+      b.setAttribute('aria-label', `${p.name}, ${fmt(p.price)}, ${left} nan stock. Ajoute nan panye.`);
+      b.innerHTML = `<b>${p.name}</b><span class="price">${fmt(p.price)}</span><span class="stock${left <= 5 ? ' low' : ''}">${left <= 0 ? 'Stock fini' : left + ' nan stock'}</span>`;
+      b.addEventListener('click', () => { add(p.id, 1); });
+      grid.appendChild(b);
+    }
+  }
+  function add(id, d) {
+    const p = products.find(x => x.id === id);
+    const q = (cart.get(id) || 0) + d;
+    if (q <= 0) cart.delete(id); else if (q <= p.stock) cart.set(id, q);
+    render();
+  }
+  function cartTotal() { let t = 0; for (const [id, q] of cart) t += products.find(x => x.id === id).price * q; return t; }
+  function render() {
+    renderProducts();
+    const list = $('cartList'); list.innerHTML = '';
+    let n = 0;
+    for (const [id, q] of cart) {
+      const p = products.find(x => x.id === id); n += q;
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${p.name}</span><span class="qty"><button type="button" aria-label="Retire yon ${p.name}">−</button>${q}<button type="button" aria-label="Ajoute yon ${p.name}">+</button></span><span class="amt">${(p.price * q).toLocaleString('en-US')}</span>`;
+      const [minus, plus] = li.querySelectorAll('button');
+      minus.addEventListener('click', () => add(id, -1));
+      plus.addEventListener('click', () => add(id, 1));
+      list.appendChild(li);
+    }
+    $('cartEmpty').hidden = n > 0;
+    $('cartCount').textContent = n + ' atik';
+    $('cartTotal').textContent = fmt(cartTotal());
+    $('sellBtn').disabled = n === 0;
+  }
+
+  function receiptHTML(sale) {
+    const lines = sale.items.map(i => `<div class="row"><span>${i.q} x ${i.name}</span><span>${(i.q * i.price).toLocaleString('en-US')}</span></div>`).join('');
+    return `<div class="c big">BOUTIK EGZANP</div><div class="c">Demo BPRO POS</div><hr>
+      <div class="row"><span>Resi #${sale.no}</span><span>${sale.time}</span></div><hr>${lines}<hr>
+      <div class="row big"><span>TOTAL</span><span>${fmt(sale.total)}</span></div>
+      <div class="row"><span>Peman</span><span>${sale.pay}</span></div><hr>
+      <div class="c">Mèsi! Stock la mete ajou.</div>`;
+  }
+
+  $('sellBtn').addEventListener('click', () => {
+    if (!cart.size) return;
+    const items = [...cart].map(([id, q]) => { const p = products.find(x => x.id === id); return { name: p.name, price: p.price, q }; });
+    for (const [id, q] of cart) products.find(x => x.id === id).stock -= q;
+    const now = new Date();
+    const sale = { no: ++invoice, items, total: cartTotal(), pay: document.querySelector('input[name=pay]:checked').value,
+      time: now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) };
+    sales.push(sale);
+    cart.clear();
+    const out = $('printerOut');
+    out.innerHTML = '';
+    const r = document.createElement('div');
+    r.className = 'receipt' + (reduce ? ' is-shown' : ' is-printing');
+    r.innerHTML = receiptHTML(sale);
+    out.appendChild(r);
+    $('printerHint').textContent = 'Resi #' + sale.no + ' enprime.';
+    $('todayCount').textContent = sales.length;
+    $('todayTotal').textContent = fmt(sales.reduce((a, s) => a + s.total, 0));
+    render();
+    renderSummary();
+  });
+
+  /* ---------------- kit chooser: selection carries to the close ---------- */
+  const kits = {
+    software:   { name: 'BPRO Software', price: '15,000 GDES / ane', specs: ['Lavant ak stock', 'Pwodwi ak sèvis', 'Kliyan ak founisè', 'Depans', 'Fakti ak resi', 'Rapò', 'Konfigirasyon', 'Fòmasyon', 'Sipò teknik'], ideal: 'Biznis ki deja gen òdinatè, tablèt, printer oswa terminal POS konpatib. Materyèl pa enkli.' },
+    mobile7:    { name: 'BPRO Mobile 7', price: '$250 USD', specs: ['Ekran 7 pous', 'Android', 'Printer tèmik entegre', 'Batri rechargeable', 'SIM card', 'Memory card', 'Wi-Fi ak Bluetooth', 'Entènèt mobil'], ideal: 'Boutik, salon, barbershop, gym, ti restoran ak famasi.' },
+    fixe:       { name: 'BPRO POS Fixe 15.6"', price: '$350 USD', specs: ['Ekran tactile 15.6 pous', 'Windows', 'Wi-Fi ak USB', 'Koneksyon scanner', 'Koneksyon printer', 'Koneksyon cash drawer', 'BPRO enstale'], ideal: 'Market, supermarket, quincaillerie, auto parts, famasi ak distribitè.' },
+    tablet:     { name: 'BPRO POS Tablet 11"', price: '$450 USD', specs: ['Ekran tactile 11 pous', 'Windows', 'Printer tèmik entegre', 'Wi-Fi ak USB', 'Koneksyon scanner', 'Koneksyon cash drawer', 'BPRO enstale'], ideal: '' },
+    restaurant: { name: 'Restaurant Mobile', price: '$500 USD', specs: ['Sunmi Mix', 'Android', 'Rechargeable', 'Printer entegre', 'Jesyon tab', 'Jesyon sèvè', 'Kitchen Order Ticket', 'Pickup ak delivery', 'Rapò sèvè'], ideal: 'Restoran kote sèvè yo pran kòmand pandan y ap deplase.' },
+  };
+  let kit = 'tablet';
+  function renderKit() {
+    const k = kits[kit];
+    document.querySelectorAll('.showcase [data-kit]').forEach(el => el.classList.toggle('is-on', el.dataset.kit === kit));
+    $('kitSpec').innerHTML = `<ul>${k.specs.map(s => `<li>${s}</li>`).join('')}</ul>
+      ${k.ideal ? `<p class="soft"><b style="color:var(--sc-ink);font-weight:600">Ideyal pou:</b> ${k.ideal}</p>` : ''}
+      <a class="btn btn--go" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Kòmande yon Kit</a>
+      <a class="btn btn--ghost" style="margin-left:8px" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+      <p class="fine soft">Disponibilite materyèl, modil ak fonksyon ka varye selon konfigirasyon ak bezwen biznis la.</p>`;
+    renderSummary();
+  }
+  document.querySelectorAll('input[name=kit]').forEach(i => i.addEventListener('change', () => { kit = i.value; renderKit(); }));
+
+  /* ---------------- the closing receipt ---------------------------------- */
+  function renderSummary() {
+    const k = kits[kit];
+    const total = sales.reduce((a, s) => a + s.total, 0);
+    const demo = sales.length
+      ? `<div class="row"><span>Vant ou fè nan demo a</span><span>${sales.length}</span></div><div class="row"><span>Total demo</span><span>${fmt(total)}</span></div>`
+      : `<div class="row"><span>Vant nan demo a</span><span><a href="#eseye" style="color:inherit">Eseye l</a></span></div>`;
+    $('summaryReceipt').innerHTML = `<div class="c big">BPRO POS</div><div class="c">Rezime ou</div><hr>
+      ${demo}<hr>
+      <div class="row"><span>Kit ou chwazi</span><span></span></div>
+      <div class="row big"><span>${k.name}</span><span>${k.price}</span></div><hr>
+      <div class="row"><span>Konfigirasyon</span><span>✓</span></div>
+      <div class="row"><span>Fòmasyon</span><span>✓</span></div>
+      <div class="row"><span>Sipò teknik</span><span>✓</span></div><hr>
+      <div class="c">Pwochen etap: demo gratis</div>`;
+  }
+
+  render();
+  renderKit();
+})();
+</script>
+</body>
+</html>

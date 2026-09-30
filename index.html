@@ -384,7 +384,7 @@
       <a href="#faq">FAQ</a>
       <a href="https://app.pointofsales.fr/login" target="_blank" rel="noopener">Konekte</a>
     </nav>
-    <a class="btn btn--go" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+    <a class="btn btn--go" data-demo href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20yon%20demo%20BPRO%20POS." target="_blank" rel="noopener">Mande yon Demo</a>
   </div>
 </header>
 
@@ -406,7 +406,7 @@
         <h1 id="hero-title" class="sc-display">Vann pi rapid. Konnen kote <em>lajan ou</em> pase.</h1>
         <p class="hero__sub">Lavant, stock, kliyan, founisè, depans, anplwaye ak pwofi sou yon sèl platfòm.</p>
         <div class="hero__ctas">
-          <a class="btn btn--go" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+          <a class="btn btn--go" data-demo href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20yon%20demo%20BPRO%20POS." target="_blank" rel="noopener">Mande yon Demo</a>
           <a class="btn btn--ghost" href="#plan">Gade plan yo</a>
         </div>
       </div>
@@ -672,7 +672,7 @@
           <h2 class="sc-display" data-sc-cue="0 1 0 0">Yon biznis k ap grandi bezwen plis pase yon kaye. <span>Li bezwen yon sistèm.</span></h2>
           <p class="close__incl" data-sc-cue="0 1 0 0">Konfigirasyon · Fòmasyon · Sipò · Demo a gratis, san obligasyon</p>
           <div class="close__ctas" data-sc-cue="0 1 0 0" data-sc-rise="0">
-            <a class="btn btn--go" data-sc-magnet="0.26" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+            <a class="btn btn--go" data-sc-magnet="0.26" data-demo href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20yon%20demo%20BPRO%20POS." target="_blank" rel="noopener">Mande yon Demo</a>
             <a class="btn btn--ghost" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Kòmande yon Kit</a>
             <a class="btn btn--ghost" href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20plis%20enf%C3%B2masyon%20sou%20BPRO%20POS." target="_blank" rel="noopener">WhatsApp</a>
           </div>
@@ -699,6 +699,7 @@
 </main>
 
 <script src="scrollcraft.js"></script>
+<script src="demo-form.js" defer></script>
 <script>ScrollCraft.mount(document.body);</script>
 <script>
 (() => {
@@ -832,7 +833,7 @@
     $('kitSpec').innerHTML = `<ul>${k.specs.map(s => `<li>${s}</li>`).join('')}</ul>
       ${k.ideal ? `<p class="soft"><b style="color:var(--sc-ink);font-weight:600">Ideyal pou:</b> ${k.ideal}</p>` : ''}
       <a class="btn btn--go" href="https://pay.pointofsales.fr/" target="_blank" rel="noopener">Kòmande yon Kit</a>
-      <a class="btn btn--ghost" style="margin-left:8px" href="https://marketing.mrdos.tech/widget/booking/nZX1CYL1EAgbmntKkKeL" target="_blank" rel="noopener">Mande yon Demo</a>
+      <a class="btn btn--ghost" style="margin-left:8px" data-demo href="https://wa.me/50943830148?text=Bonjou%2C%20mwen%20vle%20yon%20demo%20BPRO%20POS." target="_blank" rel="noopener">Mande yon Demo</a>
       <p class="fine soft">Disponibilite materyèl, modil ak fonksyon ka varye selon konfigirasyon ak bezwen biznis la.</p>`;
     renderSummary();
   }

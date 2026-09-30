@@ -309,6 +309,12 @@
   .lesson__n { font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); color: var(--sc-accent); letter-spacing: .06em; }
   .lesson h3 { margin: var(--sc-2) 0 var(--sc-2); font-size: var(--sc-t-base); font-weight: 600; }
   .lesson p { margin: 0; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); }
+  .lesson--feature { display: grid; grid-template-columns: 1.6fr 1fr; margin-bottom: var(--sc-5); border-color: color-mix(in oklab, var(--sc-accent) 45%, transparent); }
+  .lesson--feature video { height: 100%; }
+  .lesson--feature .lesson__meta { padding: var(--sc-6); align-self: center; }
+  .lesson--feature h3 { font-size: var(--sc-t-xl); line-height: 1.15; }
+  .chapters { margin: var(--sc-4) 0 0; padding-left: 1.3em; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); line-height: 1.9; }
+  @media (max-width: 1080px) { .lesson--feature { grid-template-columns: 1fr; } .lesson--feature video { height: auto; } }
   @media (max-width: 1080px) { .lessons__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .lessons__grid { grid-template-columns: 1fr; } }
   /* ---------------------------------------------------------- more/faq -- */
@@ -666,8 +672,17 @@
       <div class="lessons__head" data-sc-in data-sc-stagger="60">
         <p class="eyebrow">Lekòl BPRO</p>
         <h2 id="lessons-title" class="sc-display">Aprann BPRO an videyo.</h2>
-        <p class="sc-body">7 ti leson an Kreyòl, mwens pase 1 minit chak. Gade yo, epi eseye menm bagay la nan aplikasyon an.</p>
+        <p class="sc-body">Yon fim konplè ak 7 ti leson an Kreyòl, mwens pase 1 minit chak. Gade yo, epi eseye menm bagay la nan aplikasyon an.</p>
       </div>
+      <article class="lesson lesson--feature">
+        <video controls playsinline preload="none" poster="videos/fim-konple.jpg" aria-label="Fim konplè: yon jounen konplè ak BPRO POS"><source src="videos/fim-konple.mp4" type="video/mp4"></video>
+        <div class="lesson__meta">
+          <span class="lesson__n">Fim konplè · 3 min 10 s</span>
+          <h3>Yon jounen konplè ak BPRO POS</h3>
+          <p>Gade tout sistèm nan nan yon sèl videyo, ak yon boutik soulye ak drap:</p>
+          <ol class="chapters"><li>Kreye kont</li><li>Peye abònman</li><li>Ajoute pwodwi ak stock</li><li>Ajoute itilizatè</li><li>Vann an 2 etap (vandè → kesye)</li><li>Kliyan WhatsApp + Katalòg QR</li><li>Vant anrejistre, stock desann</li></ol>
+        </div>
+      </article>
       <div class="lessons__grid">
         <article class="lesson">
           <video controls playsinline preload="none" poster="videos/leson-1.jpg" aria-label="Leson 1: Kijan pou ajoute pwodwi"><source src="videos/leson-1.mp4" type="video/mp4"></video>

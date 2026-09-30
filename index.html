@@ -317,6 +317,9 @@
   @media (max-width: 1080px) { .lesson--feature { grid-template-columns: 1fr; } .lesson--feature video { height: auto; } }
   @media (max-width: 1080px) { .lessons__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .lessons__grid { grid-template-columns: 1fr; } }
+  .menus__head { margin: var(--sc-8) 0 var(--sc-5); max-width: 46rem; }
+  .menus__head h3 { font-size: var(--sc-t-xl); margin: 0 0 var(--sc-3); }
+  .menus__head p { margin: 0; }
   /* ---------------------------------------------------------- more/faq -- */
   .more { padding-block: var(--sc-section) var(--sc-7); }
   .more__grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--sc-8); }
@@ -672,7 +675,7 @@
       <div class="lessons__head" data-sc-in data-sc-stagger="60">
         <p class="eyebrow">Lekòl BPRO</p>
         <h2 id="lessons-title" class="sc-display">Aprann BPRO an videyo.</h2>
-        <p class="sc-body">Yon fim konplè ak 7 ti leson an Kreyòl, mwens pase 1 minit chak. Gade yo, epi eseye menm bagay la nan aplikasyon an.</p>
+        <p class="sc-body">Yon fim konplè, 7 ti leson, ak 17 gid (youn pou chak meni), an Kreyòl. Gade yo, epi eseye menm bagay la nan aplikasyon an.</p>
       </div>
       <article class="lesson lesson--feature">
         <video controls playsinline preload="none" poster="videos/fim-konple.jpg" aria-label="Fim konplè: yon jounen konplè ak BPRO POS"><source src="videos/fim-konple.mp4" type="video/mp4"></video>
@@ -713,6 +716,82 @@
           <div class="lesson__meta"><span class="lesson__n">Leson 7 · 44 s</span><h3>Vann plis ak lyen katalòg ou</h3><p>Pataje lyen an sou WhatsApp ak Facebook.</p></div>
         </article>
       </div>
+      <!-- MENU-GUIDES:START -->
+      <div class="menus__head" id="gid-meni">
+        <h3 class="sc-display">Gid chak meni</h3>
+        <p class="sc-body">17 videyo, youn pou chak meni nan aplikasyon an, etap pa etap.</p>
+      </div>
+      <div class="lessons__grid">
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m01-accueil.jpg" aria-label="Meni 1: Accueil"><source src="videos/menu/m01-accueil.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 1 · 43 s</span><h3>Accueil</h3><p>Tablo bò: vant, depans, alèt stock.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m02-users.jpg" aria-label="Meni 2: Gestion des utilisateurs"><source src="videos/menu/m02-users.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 2 · 66 s</span><h3>Gestion des utilisateurs</h3><p>Anplwaye, wòl, otorizasyon, komisyon.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m03-contacts.jpg" aria-label="Meni 3: Contacts"><source src="videos/menu/m03-contacts.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 3 · 66 s</span><h3>Contacts</h3><p>Kliyan, fournisè, gwoup kliyan, enpòtasyon.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m04-produits.jpg" aria-label="Meni 4: Produits"><source src="videos/menu/m04-produits.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 4 · 85 s</span><h3>Produits</h3><p>Kategori, inite, mak, variasyon, etikèt.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m05-achats.jpg" aria-label="Meni 5: Achats"><source src="videos/menu/m05-achats.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 5 · 48 s</span><h3>Achats</h3><p>Achte machandiz, peye fournisè, retou.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m06-ventes.jpg" aria-label="Meni 6: Ventes"><source src="videos/menu/m06-ventes.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 6 · 62 s</span><h3>Ventes</h3><p>Peman, livrezon, rabè, retou.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m07-transferts.jpg" aria-label="Meni 7: Transferts de stock"><source src="videos/menu/m07-transferts.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 7 · 44 s</span><h3>Transferts de stock</h3><p>Deplase stock ant lokal yo.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m08-ajust.jpg" aria-label="Meni 8: Ajustement du stock"><source src="videos/menu/m08-ajust.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 8 · 46 s</span><h3>Ajustement du stock</h3><p>Pwodwi kase, pèdi, envantè.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m09-depenses.jpg" aria-label="Meni 9: Dépenses"><source src="videos/menu/m09-depenses.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 9 · 50 s</span><h3>Dépenses</h3><p>Lwaye, kouran, depans chak mwa.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m10-compta.jpg" aria-label="Meni 10: Comptabilité"><source src="videos/menu/m10-compta.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 10 · 52 s</span><h3>Comptabilité</h3><p>Plan kontab, debi/kredi, bilan.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m11-gym.jpg" aria-label="Meni 11: GYM"><source src="videos/menu/m11-gym.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 11 · 55 s</span><h3>GYM</h3><p>Manm, forfè, abònman, prezans.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m12-rapports.jpg" aria-label="Meni 12: Rapports"><source src="videos/menu/m12-rapports.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 12 · 47 s</span><h3>Rapports</h3><p>Pwofi, tandans, kès, aktivite.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m13-param.jpg" aria-label="Meni 13: Paramètres"><source src="videos/menu/m13-param.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 13 · 65 s</span><h3>Paramètres</h3><p>Biznis, enprimant, taks, notifikasyon.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m14-actifs.jpg" aria-label="Meni 14: Gestion d'actifs"><source src="videos/menu/m14-actifs.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 14 · 46 s</span><h3>Gestion d'actifs</h3><p>Materyèl biznis ou ak garanti.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m15-grh.jpg" aria-label="Meni 15: GRH"><source src="videos/menu/m15-grh.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 15 · 52 s</span><h3>GRH</h3><p>Konje, prezans, pèman salè.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m16-ess.jpg" aria-label="Meni 16: Essentiel"><source src="videos/menu/m16-ess.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 16 · 53 s</span><h3>Essentiel</h3><p>Travay ekip, rapèl, mesaj.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/menu/m17-qr.jpg" aria-label="Meni 17: Catalogue QR"><source src="videos/menu/m17-qr.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Meni 17 · 37 s</span><h3>Catalogue QR</h3><p>QR, rupture de stock, kòmand WhatsApp.</p></div>
+        </article>
+      </div>
+      <!-- MENU-GUIDES:END -->
     </div>
   </section>
 

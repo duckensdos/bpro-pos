@@ -1,0 +1,65 @@
+{
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/fr/biznis/famasi.html",
+      "destination": "/logiciel-pharmacie-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/boutik-market.html",
+      "destination": "/logiciel-supermarche-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/quincaillerie.html",
+      "destination": "/logiciel-quincaillerie-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/auto-parts.html",
+      "destination": "/logiciel-auto-parts-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/restoran.html",
+      "destination": "/logiciel-restaurant-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/patisri.html",
+      "destination": "/logiciel-patisserie-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/gym.html",
+      "destination": "/logiciel-gym-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/barbershop-salon.html",
+      "destination": "/logiciel-barbershop-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/garaj-repair.html",
+      "destination": "/logiciel-garage-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/rad-tenis.html",
+      "destination": "/logiciel-boutique-vetements-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/manufacturing.html",
+      "destination": "/logiciel-fabrication-haiti/",
+      "permanent": true
+    },
+    {
+      "source": "/fr/biznis/:path*",
+      "destination": "/fr/",
+      "permanent": true
+    }
+  ]
+}

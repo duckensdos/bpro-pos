@@ -297,6 +297,20 @@
   .spec .fine { font-size: var(--sc-t-xs); margin-top: var(--sc-4); margin-bottom: 0; }
   @media (max-width: 900px) { .chooser { grid-template-columns: 1fr; gap: var(--sc-6); } .showcase { max-width: 30rem; width: 100%; margin-inline: auto; } }
 
+  /* ------------------------------------------------------- video lessons -- */
+  .lessons { padding-block: var(--sc-section) var(--sc-7); }
+  .lessons__head { max-width: 46rem; margin-bottom: var(--sc-7); }
+  .lessons__head h2 { font-size: var(--sc-t-2xl); margin: 0 0 var(--sc-4); }
+  .lessons__head p.sc-body { margin: 0; }
+  .lessons__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sc-5); }
+  .lesson { border-radius: 16px; overflow: hidden; background: #121514; border: 1px solid var(--sc-hairline-strong); }
+  .lesson video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #0B0C0D; }
+  .lesson__meta { padding: var(--sc-4) var(--sc-5) var(--sc-5); }
+  .lesson__n { font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); color: var(--sc-accent); letter-spacing: .06em; }
+  .lesson h3 { margin: var(--sc-2) 0 var(--sc-2); font-size: var(--sc-t-base); font-weight: 600; }
+  .lesson p { margin: 0; color: var(--sc-ink-soft); font-size: var(--sc-t-sm); }
+  @media (max-width: 1080px) { .lessons__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .lessons__grid { grid-template-columns: 1fr; } }
   /* ---------------------------------------------------------- more/faq -- */
   .more { padding-block: var(--sc-section) var(--sc-7); }
   .more__grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--sc-8); }
@@ -381,6 +395,7 @@
       <a href="#fonksyon">Fonksyon</a>
       <a href="#biznis">Kalite biznis</a>
       <a href="#plan">Plan</a>
+      <a href="#videyo">Videyo</a>
       <a href="#faq">FAQ</a>
       <a href="https://app.pointofsales.fr/login" target="_blank" rel="noopener">Konekte</a>
     </nav>
@@ -645,6 +660,47 @@
     </div>
   </section>
 
+  <!-- 8b · VIDEO LESSONS: Lekòl BPRO -->
+  <section class="lessons" id="videyo" aria-labelledby="lessons-title">
+    <div class="wrap">
+      <div class="lessons__head" data-sc-in data-sc-stagger="60">
+        <p class="eyebrow">Lekòl BPRO</p>
+        <h2 id="lessons-title" class="sc-display">Aprann BPRO an videyo.</h2>
+        <p class="sc-body">7 ti leson an Kreyòl, mwens pase 1 minit chak. Gade yo, epi eseye menm bagay la nan aplikasyon an.</p>
+      </div>
+      <div class="lessons__grid">
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/leson-1.jpg" aria-label="Leson 1: Kijan pou ajoute pwodwi"><source src="videos/leson-1.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Leson 1 · 42 s</span><h3>Kijan pou ajoute pwodwi</h3><p>Mete pwodwi, pri ak alèt stock.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/leson-2.jpg" aria-label="Leson 2: Vann plis ak Katalòg QR"><source src="videos/leson-2.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Leson 2 · 48 s</span><h3>Vann plis ak Katalòg QR</h3><p>Kliyan eskane epi kòmande sou WhatsApp.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/leson-3.jpg" aria-label="Leson 3: Kontwòl stock ou a distans"><source src="videos/leson-3.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Leson 3 · 47 s</span><h3>Kontwòl stock ou a distans</h3><p>Rapò stock, alèt, ak journal d'activité.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/leson-4.jpg" aria-label="Leson 4: Kijan pou kreye yon kont"><source src="videos/leson-4.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Leson 4 · 44 s</span><h3>Kijan pou kreye yon kont</h3><p>Enskri biznis ou an 2 etap.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/leson-5.jpg" aria-label="Leson 5: Kijan pou peye plan abònman ou"><source src="videos/leson-5.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Leson 5 · 47 s</span><h3>Kijan pou peye plan abònman ou</h3><p>MonCash, NatCash oswa labank.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/leson-6.jpg" aria-label="Leson 6: Kijan pou vann ak BPRO POS"><source src="videos/leson-6.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Leson 6 · 42 s</span><h3>Kijan pou vann ak BPRO POS</h3><p>Panye, peman, resi, stock ajou.</p></div>
+        </article>
+        <article class="lesson">
+          <video controls playsinline preload="none" poster="videos/leson-7.jpg" aria-label="Leson 7: Vann plis ak lyen katalòg ou"><source src="videos/leson-7.mp4" type="video/mp4"></video>
+          <div class="lesson__meta"><span class="lesson__n">Leson 7 · 44 s</span><h3>Vann plis ak lyen katalòg ou</h3><p>Pataje lyen an sou WhatsApp ak Facebook.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section class="faq" id="faq" aria-labelledby="faq-title">
     <div class="wrap faq__grid">
       <div data-sc-in><h2 id="faq-title" class="sc-display">Kesyon yo poze souvan.</h2></div>
@@ -700,6 +756,13 @@
 
 <script src="scrollcraft.js"></script>
 <script src="demo-form.js" defer></script>
+<script>
+  // Lekòl BPRO: playing one lesson pauses the others.
+  document.addEventListener('play', (e) => {
+    if (!e.target.closest || !e.target.closest('.lesson')) return;
+    document.querySelectorAll('.lesson video').forEach((v) => { if (v !== e.target) v.pause(); });
+  }, true);
+</script>
 <script>ScrollCraft.mount(document.body);</script>
 <script>
 (() => {

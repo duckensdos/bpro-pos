@@ -174,3 +174,20 @@
 
 .close__mail { margin: var(--sc-5) 0 0; font-size: var(--sc-t-sm); color: var(--sc-ink-soft); }
 .close__mail a { color: var(--sc-ink); }
+
+/* ---------------------------------------------------- try the real app -- */
+.tryapp { padding-block: var(--sc-8); }
+.tryapp__card { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--sc-7); align-items: center;
+  padding: clamp(1.75rem, 4vw, 3.5rem); border-radius: 20px;
+  background: radial-gradient(90% 140% at 0% 0%, #173A26 0%, #121615 55%, #101312 100%);
+  box-shadow: var(--sc-e3), var(--sc-edge); border: 1px solid color-mix(in oklab, var(--sc-accent) 22%, transparent); }
+.tryapp h2 { font-size: var(--sc-t-2xl); margin: var(--sc-3) 0 var(--sc-4); }
+.tryapp p { margin: 0; color: #C5CCC7; max-width: 46ch; }
+.tryapp__steps { list-style: none; margin: var(--sc-5) 0 0; padding: 0; display: grid; gap: var(--sc-2); font-size: var(--sc-t-sm); color: var(--sc-ink-soft); counter-reset: s; }
+.tryapp__steps li { counter-increment: s; display: flex; gap: var(--sc-3); align-items: baseline; }
+.tryapp__steps li::before { content: counter(s); font-family: var(--sc-font-mono); font-size: var(--sc-t-xs); color: var(--sc-accent-ink); background: var(--sc-accent); border-radius: 999px; min-width: 1.5em; height: 1.5em; display: inline-grid; place-items: center; }
+.tryapp__actions { display: grid; gap: var(--sc-3); justify-items: stretch; }
+.tryapp__actions .btn { width: 100%; }
+.tryapp__actions small { text-align: center; color: var(--sc-ink-soft); font-size: var(--sc-t-xs); }
+.tryapp__actions small a { color: var(--sc-ink); }
+@media (max-width: 860px) { .tryapp__card { grid-template-columns: 1fr; gap: var(--sc-6); } }

@@ -1,4 +1,4 @@
-// "Eseye kounya": choose apps (like odoo.com/trial), then company details, then demo / WhatsApp / pay.
+// "Eseye kounya": choose apps (like odoo.com/trial), then company details, then create the business account (app register page) or send choices on WhatsApp. The demo is only a side link.
 // Nothing is sent automatically: WhatsApp opens only when the visitor clicks.
 (function(){
   var C=window.BPRO_TRIAL, root=document.getElementById('trial'); if(!C||!root)return;
@@ -32,7 +32,7 @@
     document.getElementById('planName').textContent='BPRO '+p.toUpperCase();
     document.getElementById('planPrice').textContent=C.plans[p];
     document.getElementById('planBox').hidden=aff; document.getElementById('affNote').hidden=!aff;
-    var pay=document.getElementById('payBtn'); pay.dataset.plan=p; pay.hidden=aff;
+    document.getElementById('regBtn').hidden=aff;
     var t=f.type.options[f.type.selectedIndex];
     var lines=[C.wa_head,'',C.name+': '+f.name.value.trim(),C.biz+': '+f.biz.value.trim(),C.email+': '+f.email.value.trim(),C.tel+': '+f.tel.value.trim(),
       C.country+': '+f.country.value,C.lang+': '+f.lang.value,C.size+': '+f.size.value,C.int+': '+C.ints[it]];

@@ -9,3 +9,8 @@
     var f=t.dataset.f;document.querySelectorAll('.vsec').forEach(function(s){s.hidden=!(f==='all'||s.dataset.g===f)});
   })});
 })();
+// YouTube cards: load the player only on click (youtube-nocookie).
+document.querySelectorAll('.yt').forEach(function(el){
+  function go(){el.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+el.dataset.yt+'?autoplay=1&rel=0" title="YouTube" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'}
+  el.addEventListener('click',go,{once:true});el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}},{once:true});
+});

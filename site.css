@@ -399,3 +399,10 @@ footer .brand p{font-size:14px;margin-top:14px;max-width:280px;color:#94a3b8}
 .pick em{font-style:normal;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
 .tagb{background:#e5e7eb;color:var(--ink-2)}
 .tagr{background:#fef3c7;color:#92400e}
+.modsbox{scroll-margin-top:80px;border-radius:16px;transition:background .6s}
+.modsbox.flash{animation:mflash 1.4s ease}
+@keyframes mflash{0%{background:var(--green-l)}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){.modsbox.flash{animation:none}}
+.recbox{background:#fffbeb;border:1px solid #fde68a!important;border-radius:16px;padding:14px 14px 16px!important}
+.recbox legend{color:#92400e!important;padding:0 6px}
+.wa.wa-up{bottom:92px}

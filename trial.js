@@ -21,15 +21,33 @@
   function pickType(t){
     var rec=(t.dataset.mods||'').split(',').filter(Boolean);
     auto.forEach(function(b){b.checked=false}); auto=[];       // undo the previous type's suggestions
-    mods.forEach(function(b){
-      var r=rec.indexOf(b.value)>-1; b.closest('.pick').querySelector('.tagr').hidden=!r;
-      if(r&&!b.checked){b.checked=true;auto.push(b)}
+    mods.forEach(function(b){                                   // put every tile back in its own category
+      var pk=b.closest('.pick'); if(pk.parentNode===recGrid)pk.homeGrid.insertBefore(pk,pk.homeNext);
     });
+    mods.forEach(function(b){
+      var pk=b.closest('.pick'), r=rec.indexOf(b.value)>-1; pk.querySelector('.tagr').hidden=!r;
+      if(r){if(!b.checked){b.checked=true;auto.push(b)} recGrid.appendChild(pk)}
+    });
+    recBox.hidden=!rec.length; recBox.querySelector('legend').textContent=recBox.dataset.l.replace('{}',t.dataset.n);
+    [].slice.call(root.querySelectorAll('.modsbox .pcat')).forEach(function(fs){if(fs!==recBox)fs.hidden=!fs.querySelector('.pick')});
     hint.textContent=rec.length?C.rec_p.replace('{}',t.dataset.n):hint.dataset.def;
     form.elements.type.value=t.dataset.n; upd();
   }
   hint.dataset.def=hint.textContent;
-  types.forEach(function(t){t.addEventListener('change',function(){pickType(t)})});
+  // "Recommended for <type>" row at the top of the modules step; tiles remember their home category
+  var recBox=document.createElement('fieldset'); recBox.className='pcat recbox'; recBox.hidden=true; recBox.dataset.l=C.rec_l;
+  recBox.innerHTML='<legend></legend><div class="pgrid"></div>'; var recGrid=recBox.querySelector('.pgrid');
+  hint.parentNode.insertBefore(recBox,hint.nextSibling);
+  mods.forEach(function(b){var pk=b.closest('.pick');pk.homeGrid=pk.parentNode;pk.homeNext=pk.nextSibling});
+  var wa=document.querySelector('.wa'); if(wa)wa.classList.add('wa-up');
+  // choosing a type moves the visitor on to the modules step (Duckens 2026-10-21)
+  var mbox=root.querySelector('.modsbox'), reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  types.forEach(function(t){t.addEventListener('change',function(){
+    pickType(t);
+    var y=mbox.getBoundingClientRect().top+window.scrollY-(document.querySelector('header')||{offsetHeight:0}).offsetHeight-12;
+    window.scrollTo({top:y,behavior:reduce?'auto':'smooth'});
+    mbox.classList.remove('flash'); void mbox.offsetWidth; mbox.classList.add('flash');
+  })});
   mods.forEach(function(b){b.addEventListener('change',function(){var i=auto.indexOf(b);if(i>-1)auto.splice(i,1);upd()})});
   // deep links: ?type=famasi, ?app=crm, ?int=affiliate
   if(q.get('type')){var tt=types.filter(function(t){return t.value===q.get('type')})[0];if(tt){tt.checked=true;pickType(tt)}}

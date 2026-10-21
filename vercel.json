@@ -2,6 +2,16 @@
   "trailingSlash": true,
   "redirects": [
     {
+      "source": "/promo/ywvcp",
+      "destination": "https://app.pointofsales.fr/promo/uogr2lu1xx",
+      "permanent": false
+    },
+    {
+      "source": "/promo/ywvcp/",
+      "destination": "https://app.pointofsales.fr/promo/uogr2lu1xx",
+      "permanent": false
+    },
+    {
       "source": "/fr/biznis/famasi.html",
       "destination": "/logiciel-pharmacie-haiti/",
       "permanent": true

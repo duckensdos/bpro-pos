@@ -26,7 +26,7 @@
   }
   form.addEventListener('submit',function(e){
     e.preventDefault();var f=form.elements,ok=true;
-    ['name','biz','email','tel','country','lang','size'].forEach(function(k){var el=f[k],v=el.value.trim();var bad=!v||(k==='email'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v));el.classList.toggle('bad',bad);if(bad&&ok){ok=false;el.focus()}});
+    ['name','biz','email','tel','country','lang','size','type'].forEach(function(k){var el=f[k],v=el.value.trim();var bad=!v||(k==='email'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v));el.classList.toggle('bad',bad);if(bad&&ok){ok=false;el.focus()}});
     if(!ok)return;
     var it=form.querySelector('input[name=int]:checked').value, p=plan(f), aff=(it==='affiliate'||it==='partner');
     document.getElementById('planName').textContent='BPRO '+p.toUpperCase();
@@ -36,7 +36,7 @@
     var t=f.type.options[f.type.selectedIndex];
     var lines=[C.wa_head,'',C.name+': '+f.name.value.trim(),C.biz+': '+f.biz.value.trim(),C.email+': '+f.email.value.trim(),C.tel+': '+f.tel.value.trim(),
       C.country+': '+f.country.value,C.lang+': '+f.lang.value,C.size+': '+f.size.value,C.int+': '+C.ints[it]];
-    if(f.type.value)lines.push(t.textContent);
+    lines.push((C.type||'Tip biznis')+': '+t.textContent);
     lines.push('',C.wa_apps+': '+chosen().map(function(b){return b.dataset.n}).join(', '));
     if(!aff)lines.push('Plan: BPRO '+p.toUpperCase());
     document.getElementById('waBtn').href='https://wa.me/'+C.wa+'?text='+encodeURIComponent(lines.join('\n'));

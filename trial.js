@@ -61,7 +61,6 @@
   root.querySelector('.js-back2').addEventListener('click',function(){go(1)});
   function plan(f){
     var m=mods.filter(function(b){return b.checked}).map(function(b){return b.value}), size=f.size.selectedIndex, t=type();
-    if(t&&t.value==='lekol')return 'education';
     if(m.indexOf('woocommerce')>-1||size>=3)return 'corporate';
     if(size>=1)return 'business';
     return 'start';
@@ -82,7 +81,8 @@
       regQ.push('type='+encodeURIComponent(bt.value));
       regQ.push('apps='+encodeURIComponent(all.filter(function(b){return b.checked}).map(function(b){return b.value}).join(',')));
     }
-    document.getElementById('regBtn').href='https://app.pointofsales.fr/business/register'+(regQ.length?'?'+regQ.join('&'):'');
+    // one-page sign-up in the app: contact, plan + hardware, payment (2026-10-21)
+    document.getElementById('regBtn').href='https://app.pointofsales.fr/eseye'+(regQ.length?'?'+regQ.join('&'):'');
     var m=mods.filter(function(b){return b.checked}).map(function(b){return b.dataset.n});
     var lines=[C.wa_head,'',C.name+': '+f.name.value.trim(),C.biz+': '+f.biz.value.trim(),C.email+': '+f.email.value.trim(),C.tel+': '+f.tel.value.trim(),
       C.country+': '+f.country.value,C.lang+': '+f.lang.value,C.size+': '+f.size.value,C.int+': '+C.ints[it],C.type+': '+f.type.value,'',

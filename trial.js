@@ -57,6 +57,8 @@
     document.getElementById('planPrice').textContent=C.plans[p];
     document.getElementById('planBox').hidden=aff; document.getElementById('affNote').hidden=!aff;
     document.getElementById('regBtn').hidden=aff;
+    // pass the business type to the app sign-up, which pre-selects it and prepares the matching setup
+    document.getElementById('regBtn').href='https://app.pointofsales.fr/business/register?type='+encodeURIComponent(t.value);
     var m=mods.filter(function(b){return b.checked}).map(function(b){return b.dataset.n});
     var lines=[C.wa_head,'',C.name+': '+f.name.value.trim(),C.biz+': '+f.biz.value.trim(),C.email+': '+f.email.value.trim(),C.tel+': '+f.tel.value.trim(),
       C.country+': '+f.country.value,C.lang+': '+f.lang.value,C.size+': '+f.size.value,C.int+': '+C.ints[it],C.type+': '+f.type.value,'',

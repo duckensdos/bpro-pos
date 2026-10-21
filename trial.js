@@ -9,6 +9,7 @@
   if(q.get('app'))pre(q.get('app').split(','));
   if(q.get('type')){var o=form.querySelector('select[name=type] option[value="'+q.get('type')+'"]');if(o){o.selected=true;pre(o.dataset.apps.split(','))}}
   if(!boxes.some(function(b){return b.checked}))pre(['pos','stock']);
+  if(q.get('int')){var ri=form.querySelector('input[name=int][value="'+q.get('int')+'"]');if(ri)ri.checked=true}
   function chosen(){return boxes.filter(function(b){return b.checked})}
   function upd(){var c=chosen();cnt.textContent=c.length;bar.textContent=c.map(function(b){return b.dataset.n}).join(' · ');cont.disabled=!c.length;cont.title=c.length?'':C.none}
   boxes.forEach(function(b){b.addEventListener('change',upd)});upd();

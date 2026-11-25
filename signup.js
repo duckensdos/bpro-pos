@@ -14,8 +14,8 @@
     moncash: { label: 'MonCash', lines: [['', '+509 47 49 7805']], name: 'Duckens DOS', qr: 'moncash-qr.jpg' },
     natcash: { label: 'NatCash', lines: [['', '4383 01 48'], ['code', '253013']], name: 'Brullend Solutions', qr: 'natcash-qr.png' },
     bank: { label: 'Unibank', lines: [['htg', '271-2001-3064-6072'], ['usd', '271-2002-3064-6096']], name: 'Brullend Solutions' },
-    // Zelle added 2026-11-25: account details NOT known yet -> never invented, sent on WhatsApp instead.
-    zelle: { label: 'Zelle', lines: [], name: '', whatsapp: true },
+    // Zelle: e-mail given by Duckens 2026-11-25 (no account name given, so none is shown).
+    zelle: { label: 'Zelle', lines: [['email', 'dosduckens@gmail.com']], name: '', usd: true },
     code: { label: 'Code', lines: [], name: '', code: true },
   };
   // Tiles of the payment step (2 columns, radiogroup). Icons are generic line icons, no brand logos.
@@ -55,17 +55,17 @@
     tiles: { moncash: ['MonCash', 'QR ou numéro, depuis votre téléphone'], natcash: ['NatCash', 'QR ou code marchand'],
       zelle: ['Zelle', 'En dollars, depuis les USA'], bank: ['Unibank', 'Virement en HTG ou en USD'],
       code: ['J\'ai un code d\'activation', 'Vous avez déjà un code ? Saisissez-le ici'] },
-    zelleInfo: 'Détails Zelle envoyés par WhatsApp', zelleHint: 'Cliquez sur le bouton vert : nous vous envoyons le compte Zelle sur WhatsApp, puis vous envoyez la preuve dans la même conversation.',
-    zelleHow: (amt) => ['Cliquez sur le bouton vert pour recevoir les détails Zelle sur WhatsApp.', `Envoyez <b>${amt}</b> par Zelle.`, 'Joignez la capture du paiement dans la même conversation WhatsApp.'],
+    zelleL: 'Zelle (e-mail)', zelleHint: 'Envoyez le paiement en dollars à cette adresse Zelle.',
+    zelleHow: (amt) => [`Envoyez <b>${amt}</b> par Zelle à l'adresse ci-dessus.`, 'Faites une capture d\'écran du reçu.', 'Cliquez sur le bouton vert et joignez la capture dans WhatsApp.'],
     codeL: 'Code d\'activation', codePh: 'Exemple : BPRO-XXXX', codeHint: 'Le code remplace le paiement. Nous le vérifions puis nous activons votre compte.',
     codeHow: ['Saisissez votre code d\'activation.', 'Cliquez sur le bouton vert : le code part sur WhatsApp avec vos informations.', 'Après vérification, nous activons votre compte.'],
-    sendCode: 'Envoyer mon code sur WhatsApp', sendZelle: 'Recevoir les détails Zelle sur WhatsApp', errCode: 'Entrez votre code d\'activation.',
+    sendCode: 'Envoyer mon code sur WhatsApp', errCode: 'Entrez votre code d\'activation.',
     fine: 'Votre compte est activé après la vérification du paiement. Installation, formation et matériel sont facturés à part.',
     doneQ: (n) => `Merci${n ? ', ' + n : ''} !`, done: 'Dans WhatsApp, joignez la capture du paiement et envoyez le message. Après vérification, nous vous envoyons vos accès par WhatsApp et par e-mail.',
     reopen: 'Rouvrir WhatsApp', close: 'Fermer',
     next: 'Continuer', back: '← Retour',
     errChoice: 'Choisissez une réponse.', errEmpty: 'Merci de répondre à cette question.', errTel: 'Entrez un numéro valide.', errEmail: 'Entrez un e-mail valide.', errName: 'Entrez votre nom complet.',
-    msg: { hi: 'Bonjour BPRO, j\'ai payé mon plan. Merci d\'activer mon compte.', plan: 'Plan', amount: 'Montant', method: 'Paiement', name: 'Nom', email: 'E-mail', tel: 'Téléphone', biz: 'Entreprise', tip: 'Type d\'entreprise', adr: 'Adresse', proof: '(Je joins la capture du paiement.)', code: 'Code d\'activation', hiCode: 'Bonjour BPRO, j\'ai un code d\'activation. Merci d\'activer mon compte.', hiZelle: 'Bonjour BPRO, je veux payer mon plan par Zelle. Merci de m\'envoyer les détails Zelle.', proofZelle: '(J\'enverrai la capture du paiement ici.)' },
+    msg: { hi: 'Bonjour BPRO, j\'ai payé mon plan. Merci d\'activer mon compte.', plan: 'Plan', amount: 'Montant', method: 'Paiement', name: 'Nom', email: 'E-mail', tel: 'Téléphone', biz: 'Entreprise', tip: 'Type d\'entreprise', adr: 'Adresse', proof: '(Je joins la capture du paiement.)', code: 'Code d\'activation', hiCode: 'Bonjour BPRO, j\'ai un code d\'activation. Merci d\'activer mon compte.' },
   } : {
     title: 'Kreye kont BPRO ou', count: (i, n) => `Etap ${i} sou ${n}`,
     planQ: 'Ki plan ou vle?', planD: { start: '1 lokal · tout sa ki esansyèl', business: 'Plizyè lokal ak itilizatè', corporate: 'Branch san limit, API', education: 'Lekòl ak sant fòmasyon' },
@@ -85,17 +85,17 @@
     tiles: { moncash: ['MonCash', 'QR oswa nimewo, sou telefòn ou'], natcash: ['NatCash', 'QR oswa kòd machann'],
       zelle: ['Zelle', 'An dola, depi Etazini'], bank: ['Unibank', 'Vire labank an goud oswa dola'],
       code: ['Mwen gen yon kòd aktivasyon', 'Ou deja gen yon kòd? Antre l la a'] },
-    zelleInfo: 'Detay Zelle yo voye sou WhatsApp', zelleHint: 'Klike bouton vèt la: n ap voye kont Zelle la ba ou sou WhatsApp, epi ou voye prèv la nan menm konvèsasyon an.',
-    zelleHow: (amt) => ['Klike bouton vèt la pou resevwa detay Zelle yo sou WhatsApp.', `Voye <b>${amt}</b> pa Zelle.`, 'Tache screenshot peman an nan menm konvèsasyon WhatsApp la.'],
+    zelleL: 'Zelle (imèl)', zelleHint: 'Voye peman an an dola sou adrès Zelle sa a.',
+    zelleHow: (amt) => [`Voye <b>${amt}</b> pa Zelle sou adrès anlè a.`, 'Pran yon screenshot resi peman an.', 'Klike bouton vèt la epi tache screenshot la nan WhatsApp.'],
     codeL: 'Kòd aktivasyon', codePh: 'Egzanp: BPRO-XXXX', codeHint: 'Kòd la ranplase peman an. N ap verifye l epi aktive kont ou.',
     codeHow: ['Antre kòd aktivasyon ou.', 'Klike bouton vèt la: kòd la ale sou WhatsApp ak enfòmasyon ou yo.', 'Lè nou fin verifye l, n ap aktive kont ou.'],
-    sendCode: 'Voye kòd mwen sou WhatsApp', sendZelle: 'Resevwa detay Zelle yo sou WhatsApp', errCode: 'Antre kòd aktivasyon ou.',
+    sendCode: 'Voye kòd mwen sou WhatsApp', errCode: 'Antre kòd aktivasyon ou.',
     fine: 'Nou aktive kont ou apre nou fin verifye peman an. Enstalasyon, fòmasyon ak materyèl chaje apa.',
     doneQ: (n) => `Mèsi${n ? ', ' + n : ''}!`, done: 'Nan WhatsApp, tache screenshot peman an epi voye mesaj la. Lè nou fin verifye l, n ap voye aksè ou sou WhatsApp ak imèl.',
     reopen: 'Relouvri WhatsApp', close: 'Fèmen',
     next: 'Kontinye', back: '← Retounen',
     errChoice: 'Chwazi youn nan repons yo.', errEmpty: 'Tanpri reponn kesyon sa a.', errTel: 'Mete yon nimewo ki valab.', errEmail: 'Mete yon imèl ki valab.', errName: 'Mete non konplè ou.',
-    msg: { hi: 'Bonjou BPRO, mwen peye plan mwen. Tanpri aktive kont mwen.', plan: 'Plan', amount: 'Montan', method: 'Peman', name: 'Non', email: 'Imèl', tel: 'Telefòn', biz: 'Biznis', tip: 'Kalite biznis', adr: 'Adrès', proof: '(M ap tache screenshot peman an.)', code: 'Kòd aktivasyon', hiCode: 'Bonjou BPRO, mwen gen yon kòd aktivasyon. Tanpri aktive kont mwen.', hiZelle: 'Bonjou BPRO, mwen vle peye plan mwen pa Zelle. Tanpri voye detay Zelle yo ban mwen.', proofZelle: '(M ap voye screenshot peman an la a.)' },
+    msg: { hi: 'Bonjou BPRO, mwen peye plan mwen. Tanpri aktive kont mwen.', plan: 'Plan', amount: 'Montan', method: 'Peman', name: 'Non', email: 'Imèl', tel: 'Telefòn', biz: 'Biznis', tip: 'Kalite biznis', adr: 'Adrès', proof: '(M ap tache screenshot peman an.)', code: 'Kòd aktivasyon', hiCode: 'Bonjou BPRO, mwen gen yon kòd aktivasyon. Tanpri aktive kont mwen.' },
   };
 
   // Path to assets/ from this script's own URL, so it works from /, /fr/, /biznis/ and /logiciel-*/.
@@ -317,22 +317,20 @@
       form.querySelector('.su__planName').textContent = p.name;
       form.querySelector('.su__amount').textContent = gdes(p.price);
       form.querySelector('.su__usd').textContent = `≈ $${fmt(Math.round(p.price / HTG_PER_USD))} USD · 1 USD ≈ ${HTG_PER_USD} HTG`;
-      const rows = m.lines.map(([k, v]) => `<dt>${k === 'code' ? L.code : k === 'htg' ? `Unibank ${L.htg}` : k === 'usd' ? `Unibank ${L.usd}` : m.label}</dt><dd>${v}</dd>`).join('');
+      const rows = m.lines.map(([k, v]) => `<dt>${k === 'code' ? L.code : k === 'htg' ? `Unibank ${L.htg}` : k === 'usd' ? `Unibank ${L.usd}` : k === 'email' ? L.zelleL : m.label}</dt><dd>${v}</dd>`).join('');
       const info = form.querySelector('.su__info');
       info.classList.toggle('su__info--noqr', !m.qr);
       const kod = f.kod ? f.kod.value : '';
       if (m.code) {
         info.innerHTML = `<label class="su__field">${L.codeL}<input type="text" name="kod" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="${L.codePh}"></label><p>${L.codeHint}</p>`;
         f.kod.value = kod;
-      } else if (m.whatsapp) {
-        info.innerHTML = `<p class="su__note">${L.zelleInfo}</p><p>${L.zelleHint}</p>`;
       } else {
         info.innerHTML = `${m.qr ? `<img src="${ASSETS}${m.qr}" width="264" height="320" alt="QR ${m.label}, ${m.name}">` : ''}
-        <dl>${rows}<dt>${L.holder}</dt><dd>${m.name}</dd></dl>${m.qr ? `<p>${L.scan}</p>` : ''}`;
+        <dl>${rows}${m.name ? `<dt>${L.holder}</dt><dd>${m.name}</dd>` : ''}</dl>${m.qr ? `<p>${L.scan}</p>` : m.usd ? `<p>${L.zelleHint}</p>` : ''}`;
       }
-      const how = m.code ? L.codeHow : m.whatsapp ? L.zelleHow(`$${fmt(Math.round(p.price / HTG_PER_USD))} USD`) : L.how(gdes(p.price));
+      const how = m.code ? L.codeHow : m.usd ? L.zelleHow(`$${fmt(Math.round(p.price / HTG_PER_USD))} USD`) : L.how(gdes(p.price));
       form.querySelector('.su__how').innerHTML = how.map(t => `<li>${t}</li>`).join('');
-      send.querySelector('span').textContent = m.code ? L.sendCode : m.whatsapp ? L.sendZelle : L.send;
+      send.querySelector('span').textContent = m.code ? L.sendCode : L.send;
     }
 
     function show(i) {
@@ -419,10 +417,10 @@
       if (m.code && value('kod').length < 4) { err.textContent = L.errCode; f.kod.focus(); return; }
       const M = L.msg;
       const msg = [
-        m.code ? M.hiCode : m.whatsapp ? M.hiZelle : M.hi,
+        m.code ? M.hiCode : M.hi,
         '',
         `${M.plan}: ${p.name}`,
-        m.code ? `${M.code}: ${value('kod').toUpperCase()}` : `${M.amount}: ${gdes(p.price)}`,
+        m.code ? `${M.code}: ${value('kod').toUpperCase()}` : `${M.amount}: ${gdes(p.price)}${m.usd ? ` (≈ $${fmt(Math.round(p.price / HTG_PER_USD))} USD)` : ""}`,
         `${M.method}: ${m.code ? L.tiles.code[0] : m.label}`,
         '',
         `${M.name}: ${value('non')}`,
@@ -431,7 +429,7 @@
         `${M.biz}: ${value('biznis')}`,
         `${M.tip}: ${value('tip')}`,
         `${M.adr}: ${value('adres')}`,
-        ...(m.code ? [] : ['', m.whatsapp ? M.proofZelle : M.proof]),
+        ...(m.code ? [] : ['', M.proof]),
       ].join('\n');
       if (GHL_WEBHOOK) {
         const payload = {

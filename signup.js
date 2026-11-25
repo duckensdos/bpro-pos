@@ -1,6 +1,6 @@
 /* BPRO sign-up: pay first, then we create the account.
    Every link marked [data-signup] opens this form (optional data-plan="start|business|corporate|education").
-   One question per screen: plan → business type → business name → address → contact → price + payment (MonCash / NatCash / Unibank).
+   One question per screen: plan → business type → business name → address → contact → price + payment (MonCash / NatCash / Zelle / Unibank / activation code; 2-column tiles since 2026-11-25).
    "Voye prèv la sou WhatsApp" opens WhatsApp with every answer written, so the client attaches the payment proof photo there.
    It also sends the same answers to a GoHighLevel inbound webhook (if GHL_WEBHOOK is set).
    Without JS, the link itself still opens pay.pointofsales.fr. */
@@ -14,7 +14,19 @@
     moncash: { label: 'MonCash', lines: [['', '+509 47 49 7805']], name: 'Duckens DOS', qr: 'moncash-qr.jpg' },
     natcash: { label: 'NatCash', lines: [['', '4383 01 48'], ['code', '253013']], name: 'Brullend Solutions', qr: 'natcash-qr.png' },
     bank: { label: 'Unibank', lines: [['htg', '271-2001-3064-6072'], ['usd', '271-2002-3064-6096']], name: 'Brullend Solutions' },
+    // Zelle added 2026-11-25: account details NOT known yet -> never invented, sent on WhatsApp instead.
+    zelle: { label: 'Zelle', lines: [], name: '', whatsapp: true },
+    code: { label: 'Code', lines: [], name: '', code: true },
   };
+  // Tiles of the payment step (2 columns, radiogroup). Icons are generic line icons, no brand logos.
+  const ICON = {
+    moncash: '<rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/><path d="M12 7.5v6M10.2 9.2c0-.8.8-1.3 1.8-1.3s1.8.5 1.8 1.3-.8 1.1-1.8 1.3-1.8.6-1.8 1.4.8 1.3 1.8 1.3 1.8-.5 1.8-1.3"/>',
+    natcash: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/>',
+    zelle: '<circle cx="12" cy="12" r="9"/><path d="M12 6.5v11M14.8 9c0-1.2-1.2-2-2.8-2s-2.8.8-2.8 2 1.2 1.7 2.8 2 2.8.8 2.8 2-1.2 2-2.8 2-2.8-.8-2.8-2"/>',
+    bank: '<path d="M3 10h18L12 4z"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+    code: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/>',
+  };
+  const METHODS = ['moncash', 'natcash', 'zelle', 'bank', 'code'];
   const PLANS = [
     { id: 'start', name: 'BPRO START', price: 15000 },
     { id: 'business', name: 'BPRO BUSINESS', price: 50000, pop: true },
@@ -40,12 +52,20 @@
     scan: 'Scannez le QR ou envoyez au numéro.',
     howT: 'Comment ça marche', how: (amt) => [`Envoyez <b>${amt}</b> avec le mode choisi.`, 'Faites une capture d\'écran du reçu.', 'Cliquez sur le bouton vert et joignez la capture dans WhatsApp.'],
     send: 'J\'ai payé : envoyer la preuve sur WhatsApp',
+    tiles: { moncash: ['MonCash', 'QR ou numéro, depuis votre téléphone'], natcash: ['NatCash', 'QR ou code marchand'],
+      zelle: ['Zelle', 'En dollars, depuis les USA'], bank: ['Unibank', 'Virement en HTG ou en USD'],
+      code: ['J\'ai un code d\'activation', 'Vous avez déjà un code ? Saisissez-le ici'] },
+    zelleInfo: 'Détails Zelle envoyés par WhatsApp', zelleHint: 'Cliquez sur le bouton vert : nous vous envoyons le compte Zelle sur WhatsApp, puis vous envoyez la preuve dans la même conversation.',
+    zelleHow: (amt) => ['Cliquez sur le bouton vert pour recevoir les détails Zelle sur WhatsApp.', `Envoyez <b>${amt}</b> par Zelle.`, 'Joignez la capture du paiement dans la même conversation WhatsApp.'],
+    codeL: 'Code d\'activation', codePh: 'Exemple : BPRO-XXXX', codeHint: 'Le code remplace le paiement. Nous le vérifions puis nous activons votre compte.',
+    codeHow: ['Saisissez votre code d\'activation.', 'Cliquez sur le bouton vert : le code part sur WhatsApp avec vos informations.', 'Après vérification, nous activons votre compte.'],
+    sendCode: 'Envoyer mon code sur WhatsApp', sendZelle: 'Recevoir les détails Zelle sur WhatsApp', errCode: 'Entrez votre code d\'activation.',
     fine: 'Votre compte est activé après la vérification du paiement. Installation, formation et matériel sont facturés à part.',
     doneQ: (n) => `Merci${n ? ', ' + n : ''} !`, done: 'Dans WhatsApp, joignez la capture du paiement et envoyez le message. Après vérification, nous vous envoyons vos accès par WhatsApp et par e-mail.',
     reopen: 'Rouvrir WhatsApp', close: 'Fermer',
     next: 'Continuer', back: '← Retour',
     errChoice: 'Choisissez une réponse.', errEmpty: 'Merci de répondre à cette question.', errTel: 'Entrez un numéro valide.', errEmail: 'Entrez un e-mail valide.', errName: 'Entrez votre nom complet.',
-    msg: { hi: 'Bonjour BPRO, j\'ai payé mon plan. Merci d\'activer mon compte.', plan: 'Plan', amount: 'Montant', method: 'Paiement', name: 'Nom', email: 'E-mail', tel: 'Téléphone', biz: 'Entreprise', tip: 'Type d\'entreprise', adr: 'Adresse', proof: '(Je joins la capture du paiement.)' },
+    msg: { hi: 'Bonjour BPRO, j\'ai payé mon plan. Merci d\'activer mon compte.', plan: 'Plan', amount: 'Montant', method: 'Paiement', name: 'Nom', email: 'E-mail', tel: 'Téléphone', biz: 'Entreprise', tip: 'Type d\'entreprise', adr: 'Adresse', proof: '(Je joins la capture du paiement.)', code: 'Code d\'activation', hiCode: 'Bonjour BPRO, j\'ai un code d\'activation. Merci d\'activer mon compte.', hiZelle: 'Bonjour BPRO, je veux payer mon plan par Zelle. Merci de m\'envoyer les détails Zelle.', proofZelle: '(J\'enverrai la capture du paiement ici.)' },
   } : {
     title: 'Kreye kont BPRO ou', count: (i, n) => `Etap ${i} sou ${n}`,
     planQ: 'Ki plan ou vle?', planD: { start: '1 lokal · tout sa ki esansyèl', business: 'Plizyè lokal ak itilizatè', corporate: 'Branch san limit, API', education: 'Lekòl ak sant fòmasyon' },
@@ -62,12 +82,20 @@
     scan: 'Skane QR la oswa voye sou nimewo a.',
     howT: 'Kijan sa mache', how: (amt) => [`Voye <b>${amt}</b> ak metòd ou chwazi a.`, 'Pran yon screenshot resi peman an.', 'Klike bouton vèt la epi tache screenshot la nan WhatsApp.'],
     send: 'Mwen peye: voye prèv la sou WhatsApp',
+    tiles: { moncash: ['MonCash', 'QR oswa nimewo, sou telefòn ou'], natcash: ['NatCash', 'QR oswa kòd machann'],
+      zelle: ['Zelle', 'An dola, depi Etazini'], bank: ['Unibank', 'Vire labank an goud oswa dola'],
+      code: ['Mwen gen yon kòd aktivasyon', 'Ou deja gen yon kòd? Antre l la a'] },
+    zelleInfo: 'Detay Zelle yo voye sou WhatsApp', zelleHint: 'Klike bouton vèt la: n ap voye kont Zelle la ba ou sou WhatsApp, epi ou voye prèv la nan menm konvèsasyon an.',
+    zelleHow: (amt) => ['Klike bouton vèt la pou resevwa detay Zelle yo sou WhatsApp.', `Voye <b>${amt}</b> pa Zelle.`, 'Tache screenshot peman an nan menm konvèsasyon WhatsApp la.'],
+    codeL: 'Kòd aktivasyon', codePh: 'Egzanp: BPRO-XXXX', codeHint: 'Kòd la ranplase peman an. N ap verifye l epi aktive kont ou.',
+    codeHow: ['Antre kòd aktivasyon ou.', 'Klike bouton vèt la: kòd la ale sou WhatsApp ak enfòmasyon ou yo.', 'Lè nou fin verifye l, n ap aktive kont ou.'],
+    sendCode: 'Voye kòd mwen sou WhatsApp', sendZelle: 'Resevwa detay Zelle yo sou WhatsApp', errCode: 'Antre kòd aktivasyon ou.',
     fine: 'Nou aktive kont ou apre nou fin verifye peman an. Enstalasyon, fòmasyon ak materyèl chaje apa.',
     doneQ: (n) => `Mèsi${n ? ', ' + n : ''}!`, done: 'Nan WhatsApp, tache screenshot peman an epi voye mesaj la. Lè nou fin verifye l, n ap voye aksè ou sou WhatsApp ak imèl.',
     reopen: 'Relouvri WhatsApp', close: 'Fèmen',
     next: 'Kontinye', back: '← Retounen',
     errChoice: 'Chwazi youn nan repons yo.', errEmpty: 'Tanpri reponn kesyon sa a.', errTel: 'Mete yon nimewo ki valab.', errEmail: 'Mete yon imèl ki valab.', errName: 'Mete non konplè ou.',
-    msg: { hi: 'Bonjou BPRO, mwen peye plan mwen. Tanpri aktive kont mwen.', plan: 'Plan', amount: 'Montan', method: 'Peman', name: 'Non', email: 'Imèl', tel: 'Telefòn', biz: 'Biznis', tip: 'Kalite biznis', adr: 'Adrès', proof: '(M ap tache screenshot peman an.)' },
+    msg: { hi: 'Bonjou BPRO, mwen peye plan mwen. Tanpri aktive kont mwen.', plan: 'Plan', amount: 'Montan', method: 'Peman', name: 'Non', email: 'Imèl', tel: 'Telefòn', biz: 'Biznis', tip: 'Kalite biznis', adr: 'Adrès', proof: '(M ap tache screenshot peman an.)', code: 'Kòd aktivasyon', hiCode: 'Bonjou BPRO, mwen gen yon kòd aktivasyon. Tanpri aktive kont mwen.', hiZelle: 'Bonjou BPRO, mwen vle peye plan mwen pa Zelle. Tanpri voye detay Zelle yo ban mwen.', proofZelle: '(M ap voye screenshot peman an la a.)' },
   };
 
   // Path to assets/ from this script's own URL, so it works from /, /fr/, /biznis/ and /logiciel-*/.
@@ -79,7 +107,7 @@
   const gdes = (n) => `${fmt(n)} ${FR ? 'HTG' : 'GDES'}`;
 
   const css = `
-  .su { width: min(34rem, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 0; border: 1px solid rgba(242,244,241,.16);
+  .su { width: min(34rem, calc(100vw - 24px)); max-height: calc(100dvh - 24px); margin: auto; padding: 0; border: 1px solid rgba(242,244,241,.16);
     border-radius: 18px; background: #111413; color: #F2F4F1; box-shadow: 0 24px 64px rgba(0,0,0,.55); font: inherit; overflow: auto; overscroll-behavior: contain; }
   .su::backdrop { background: rgba(4,6,5,.72); backdrop-filter: blur(4px); }
   .su form { display: grid; gap: 18px; padding: 24px; }
@@ -115,7 +143,24 @@
   .su__sum small { color: #9FA8A2; }
   .su__sum button { border: 0; background: none; color: #22C56B; font: inherit; font-size: .9rem; padding: 4px 0; cursor: pointer; text-decoration: underline; }
   .su__label { margin: 0; font-size: .85rem; color: #C9D0CB; }
-  .su__methods { grid-template-columns: repeat(3, 1fr); }
+  .su__methods { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .su__tile { display: grid; grid-template-columns: 36px 1fr; grid-template-rows: auto auto; align-content: center; gap: 2px 10px; text-align: left; padding: 12px; min-height: 72px;
+    border: 1px solid rgba(242,244,241,.18); border-radius: 12px; cursor: pointer; position: relative; transition: border-color 150ms ease, background 150ms ease; }
+  .su__tile input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+  .su__tile .su__ti { grid-row: 1 / 3; align-self: center; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: rgba(242,244,241,.08); color: #C9D0CB; }
+  .su__tile b { font-size: .98rem; line-height: 1.25; }
+  .su__tile small { grid-column: 2; color: #9FA8A2; font-size: .8rem; line-height: 1.35; }
+  .su__tile:hover { border-color: rgba(242,244,241,.32); }
+  .su__tile:has(input:checked) { border-color: #22C56B; background: rgba(34,197,107,.12); }
+  .su__tile:has(input:checked) .su__ti { background: #22C56B; color: #04140A; }
+  .su__tile:has(input:checked)::after { content: ''; position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; border-radius: 50%; background: #22C56B; }
+  .su__tile:has(input:focus-visible) { outline: 2px solid #22C56B; outline-offset: 2px; }
+  .su__tile--wide { grid-column: 1 / -1; }
+  @media (max-width: 360px) { .su__methods { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .su__tile { transition: none; } }
+  .su__note { margin: 0; font-size: 1rem; font-weight: 700; color: #F2F4F1; }
+  .su__info .su__field { grid-column: 1 / -1; justify-self: stretch; text-align: left; }
+  .su__info input[name=kod]:not(:placeholder-shown) { text-transform: uppercase; letter-spacing: .04em; }
   .su__method { display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; text-align: center; padding: 12px 8px; border: 1px solid rgba(242,244,241,.18); border-radius: 12px; cursor: pointer; font-weight: 600; font-size: .95rem; min-height: 64px; }
   .su__method input { position: absolute; opacity: 0; pointer-events: none; }
   .su__method { position: relative; }
@@ -218,9 +263,9 @@
         </div>
         <p class="su__label" id="suMethodL">${L.method}</p>
         <div class="su__methods" role="radiogroup" aria-labelledby="suMethodL">
-          <label class="su__method"><input type="radio" name="metod" value="moncash" checked>MonCash</label>
-          <label class="su__method"><input type="radio" name="metod" value="natcash">NatCash</label>
-          <label class="su__method"><input type="radio" name="metod" value="bank">Unibank</label>
+          ${METHODS.map((k, i) => `<label class="su__tile${k === 'code' ? ' su__tile--wide' : ''}"><input type="radio" name="metod" value="${k}"${i === 0 ? ' checked' : ''} aria-describedby="suTd_${k}">
+            <span class="su__ti" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg></span>
+            <b>${L.tiles[k][0]}</b><small id="suTd_${k}">${L.tiles[k][1]}</small></label>`).join('')}
         </div>
         <div class="su__info" aria-live="polite"></div>
         <p class="su__label">${L.howT}</p>
@@ -275,9 +320,19 @@
       const rows = m.lines.map(([k, v]) => `<dt>${k === 'code' ? L.code : k === 'htg' ? `Unibank ${L.htg}` : k === 'usd' ? `Unibank ${L.usd}` : m.label}</dt><dd>${v}</dd>`).join('');
       const info = form.querySelector('.su__info');
       info.classList.toggle('su__info--noqr', !m.qr);
-      info.innerHTML = `${m.qr ? `<img src="${ASSETS}${m.qr}" width="264" height="320" alt="QR ${m.label}, ${m.name}">` : ''}
+      const kod = f.kod ? f.kod.value : '';
+      if (m.code) {
+        info.innerHTML = `<label class="su__field">${L.codeL}<input type="text" name="kod" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="${L.codePh}"></label><p>${L.codeHint}</p>`;
+        f.kod.value = kod;
+      } else if (m.whatsapp) {
+        info.innerHTML = `<p class="su__note">${L.zelleInfo}</p><p>${L.zelleHint}</p>`;
+      } else {
+        info.innerHTML = `${m.qr ? `<img src="${ASSETS}${m.qr}" width="264" height="320" alt="QR ${m.label}, ${m.name}">` : ''}
         <dl>${rows}<dt>${L.holder}</dt><dd>${m.name}</dd></dl>${m.qr ? `<p>${L.scan}</p>` : ''}`;
-      form.querySelector('.su__how').innerHTML = L.how(gdes(p.price)).map(t => `<li>${t}</li>`).join('');
+      }
+      const how = m.code ? L.codeHow : m.whatsapp ? L.zelleHow(`$${fmt(Math.round(p.price / HTG_PER_USD))} USD`) : L.how(gdes(p.price));
+      form.querySelector('.su__how').innerHTML = how.map(t => `<li>${t}</li>`).join('');
+      send.querySelector('span').textContent = m.code ? L.sendCode : m.whatsapp ? L.sendZelle : L.send;
     }
 
     function show(i) {
@@ -310,20 +365,26 @@
       return '';
     }
 
-    function open(planId) {
+    // d = the clicked link's data-* (plan, and from /eseye step 3 also tip/biznis/adres/non/imel/telefon):
+    // answers already given on the page are filled in, and the form opens on the first one still missing.
+    function open(d) {
+      const planId = d.plan || '';
       form.reset();
       if (preset) f.tip.value = preset;
+      ['tip', 'biznis', 'adres', 'non', 'imel', 'telefon'].forEach(k => { if (d[k]) f[k].value = d[k]; });
       const known = PLANS.some(p => p.id === planId);
       if (known) form.querySelector(`input[name=plan][value="${planId}"]`).checked = true;
       dlg.showModal();
-      show(known ? 1 : 0);
+      let i = known ? 1 : 0;
+      while (known && i < STEPS.length - 2 && !check(i)) i++;
+      show(i);
     }
 
     document.addEventListener('click', (e) => {
       const a = e.target.closest('[data-signup]');
       if (!a || typeof dlg.showModal !== 'function') return;
       e.preventDefault();
-      open(a.dataset.plan || '');
+      open(a.dataset);
     });
     dlg.querySelector('.su__close').addEventListener('click', () => dlg.close());
     dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
@@ -355,13 +416,14 @@
 
       const p = plan();
       const m = PAY[value('metod')] || PAY.moncash;
+      if (m.code && value('kod').length < 4) { err.textContent = L.errCode; f.kod.focus(); return; }
       const M = L.msg;
       const msg = [
-        M.hi,
+        m.code ? M.hiCode : m.whatsapp ? M.hiZelle : M.hi,
         '',
         `${M.plan}: ${p.name}`,
-        `${M.amount}: ${gdes(p.price)}`,
-        `${M.method}: ${m.label}`,
+        m.code ? `${M.code}: ${value('kod').toUpperCase()}` : `${M.amount}: ${gdes(p.price)}`,
+        `${M.method}: ${m.code ? L.tiles.code[0] : m.label}`,
         '',
         `${M.name}: ${value('non')}`,
         `${M.email}: ${value('imel')}`,
@@ -369,14 +431,13 @@
         `${M.biz}: ${value('biznis')}`,
         `${M.tip}: ${value('tip')}`,
         `${M.adr}: ${value('adres')}`,
-        '',
-        M.proof,
+        ...(m.code ? [] : ['', m.whatsapp ? M.proofZelle : M.proof]),
       ].join('\n');
       if (GHL_WEBHOOK) {
         const payload = {
           full_name: value('non'), email: value('imel'), phone: value('telefon'),
           business_name: value('biznis'), business_type: value('tip'), address: value('adres'),
-          plan: p.name, amount_htg: p.price, payment_method: m.label,
+          plan: p.name, amount_htg: m.code ? 0 : p.price, payment_method: m.code ? 'activation code' : m.label, activation_code: m.code ? value('kod').toUpperCase() : '',
           page: location.href, source: 'pointofsales.fr signup (pay first)',
         };
         fetch(GHL_WEBHOOK, { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })

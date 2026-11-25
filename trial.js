@@ -74,6 +74,11 @@
     document.getElementById('planPrice').textContent=C.plans[p];
     document.getElementById('planBox').hidden=aff; document.getElementById('affNote').hidden=!aff;
     document.getElementById('regBtn').hidden=aff;
+    // "pay now" opens the site's pay-first form (signup.js) on its payment step: tiles MonCash / NatCash / Zelle / Unibank / activation code.
+    // The answers given here are passed on, so the form only asks what is still missing (address). 2026-11-25
+    var pb=document.getElementById('payBtn');
+    if(pb){pb.hidden=aff;var d=pb.dataset;d.plan=(p==='corporate'||p==='business')?p:'start';d.tip=f.type.value;d.biznis=f.biz.value.trim();
+      d.non=f.name.value.trim();d.imel=f.email.value.trim();d.telefon=f.tel.value.trim();}
     // pass the business type to the app sign-up, which pre-selects it (added by another session, 1065cfa; fixed: it used an undefined variable)
     // + the apps ticked here (base apps included): the app sign-up then skips its "type" and "apps" steps
     var bt=type(), regQ=[];

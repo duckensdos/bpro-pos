@@ -384,4 +384,10 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.pointofsales.fr/fr/tutoriels/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pointofsales.fr/tutoriels/"/>
   </url>
+  <url>
+    <loc>https://www.pointofsales.fr/fr/confidentialite/</loc>
+  </url>
+  <url>
+    <loc>https://www.pointofsales.fr/fr/suppression-compte/</loc>
+  </url>
 </urlset>

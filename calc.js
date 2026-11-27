@@ -29,6 +29,12 @@
     ['otel', 'otel,kontablite', 'Otèl', 'Hôtel'],
     ['miltiservis', 'reparasyon', 'Miltisèvis', 'Multiservices'],
     ['location-machin', 'aktif,kontablite', 'Location machin', 'Location de voitures'],
+    ['imobilye', 'crm,pwoje', 'Ajans imobilye', 'Agence immobilière'],
+    ['asirans', 'crm,kontablite', 'Asirans', 'Assurance'],
+    ['ajans-maketing', 'crm,pwoje', 'Ajans maketing ak sèvis', 'Agence marketing et services'],
+    ['biwo-pwofesyonel', 'crm,pwoje,kontablite', 'Biwo pwofesyonèl (kontab, avoka, konsiltan)', 'Cabinet (comptable, avocat, consultant)'],
+    ['konstriksyon', 'crm,pwoje', 'Konstriksyon ak sèvis lakay', 'Construction et services à domicile'],
+    ['ajans-vwayaj', 'crm,kontablite', 'Ajans vwayaj', 'Agence de voyage'],
     ['other', '', 'Lòt', 'Autre']
   ];
   var MODS = [

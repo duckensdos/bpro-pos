@@ -508,3 +508,67 @@ footer .brand p{font-size:14px;margin-top:14px;max-width:280px;color:#94a3b8}
 }
 @media (max-width:420px){.calc__in,.calc__out{padding:20px 16px}}
 @media (prefers-reduced-motion:reduce){.calc__bar i,.calc__chip span{transition:none}}
+
+/* SETUP ASSISTANT (assist.js, 2026-11-26): describe your business, we pick type, apps and plan */
+.assist{max-width:820px;margin:0 auto;text-align:left}
+.assist .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.assist__head{text-align:center;margin-bottom:24px}
+.assist__head h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.025em;line-height:1.15}
+.assist__head p{color:var(--ink-2);max-width:640px;margin:10px auto 0}
+.assist__box{background:#111413;border:1px solid #262b28;border-radius:16px;box-shadow:0 14px 34px rgba(16,24,40,.16)}
+.assist__box[hidden],.assist__ex[hidden]{display:none}
+.assist__box textarea{display:block;width:100%;min-height:64px;max-height:200px;resize:none;overflow:auto;border:0;background:transparent;color:#F2F4F1;font:inherit;font-size:16px;line-height:1.5;padding:16px 18px 6px;outline:none}
+.assist__box textarea::placeholder{color:#7d867f}
+.assist__box:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.2),0 14px 34px rgba(16,24,40,.16)}
+.assist__bar{display:flex;justify-content:space-between;align-items:center;padding:8px 10px 10px 18px}
+.assist__hint{font-size:12px;color:#7d867f}
+.assist__send{width:38px;height:38px;border-radius:10px;border:1px solid #333a36;background:transparent;color:#7d867f;display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}
+.assist__send:not(:disabled){background:var(--green);border-color:var(--green);color:#fff}
+.assist__send:disabled{cursor:default}
+.assist__send:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.assist__ex,.assist__opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.assist__opts{justify-content:flex-start;margin:4px 0 4px 0}
+.assist__chip{font:inherit;font-size:14px;font-weight:600;color:var(--ink-2);background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+.assist__chip:hover{border-color:var(--green);color:var(--green-d);background:var(--green-l)}
+.assist__chip:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.assist__log{display:grid;gap:12px;margin-bottom:14px}
+.assist__log:empty{display:none}
+.assist__msg{max-width:92%;padding:12px 16px;border-radius:14px;font-size:15px;line-height:1.5}
+.assist__msg--me{justify-self:end;background:#111413;color:#F2F4F1;border-bottom-right-radius:4px}
+.assist__msg--bot{justify-self:start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px;box-shadow:var(--shadow)}
+.assist__who{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.6;margin-bottom:2px}
+.assist__msg--bot .assist__who{color:var(--green-d);opacity:1}
+.assist__base{font-size:13px;color:var(--ink-3);margin-top:6px}
+.assist__apps{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.assist__app{position:relative;cursor:pointer}
+.assist__app input{position:absolute;opacity:0;width:1px;height:1px}
+.assist__app span{display:inline-flex;gap:6px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;font-size:14px;font-weight:600;color:var(--ink-2);background:#fff}
+.assist__app input:checked+span{border-color:var(--green);background:var(--green-l);color:var(--green-d)}
+.assist__app input:checked+span::before{content:"✓";font-weight:800}
+.assist__app input:focus-visible+span{outline:2px solid var(--green);outline-offset:2px}
+.assist__app input:disabled+span{opacity:.75;cursor:default}
+.assist__ok{margin-top:4px;flex-basis:100%;justify-content:center;max-width:220px}
+.assist__sum{display:grid;gap:10px;min-width:min(520px,72vw)}
+.assist__st{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.assist__sum dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.assist__sum dt{color:var(--ink-3)}
+.assist__sum dd{font-weight:600}
+.assist__price{display:grid;gap:2px;padding:14px;border-radius:12px;background:var(--green-l)}
+.assist__price span{font-size:14px;color:var(--ink-2)}.assist__price b{color:var(--green-d)}
+.assist__price strong{font-size:30px;letter-spacing:-.02em}
+.assist__price strong small{font-size:14px;color:var(--ink-3)}
+.assist__price>small{font-size:13px;color:var(--ink-2)}
+.assist__note{font-size:13px;color:var(--ink-3)}
+.assist__pay{justify-content:center;text-align:center}
+.assist__links{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;font-size:14px}
+.assist__links a,.assist__restart{color:var(--green-d);font-weight:600;text-decoration:underline;background:none;border:0;font:inherit;font-size:14px;cursor:pointer;padding:4px 0}
+@media (max-width:560px){.assist__msg{max-width:100%}.assist__sum{min-width:0}}
+@media (prefers-reduced-motion:reduce){.assist__chip,.assist__send{transition:none}}
+.asklink{text-align:center;margin:-6px 0 18px}.asklink a{color:var(--green-d);font-weight:700;text-decoration:underline}
+
+/* assistant inside the hero (2026-11-26, Duckens: at the top, before the applications) */
+.assist--hero{margin-top:34px;position:relative;z-index:2;scroll-margin-top:90px}
+.assist--hero .assist__head{margin-bottom:14px}
+.assist--hero .assist__head .eyebrow{margin-bottom:8px}
+.assist--hero .assist__head h2{font-size:clamp(19px,2.4vw,24px)}
+.assist--hero .assist__head p{display:none}
